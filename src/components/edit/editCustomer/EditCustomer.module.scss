@@ -1,0 +1,178 @@
+@use "../../../scss/abstracts/" as *;
+
+.edit__container {
+  @include flex();
+  flex-wrap: wrap;
+}
+
+.edit__left,
+.edit__right {
+  flex: 1;
+  min-width: 400px;
+  max-width: 600px;
+  margin: 0 1rem;
+  @media screen and (max-width: 1210px) {
+    margin-top: 2rem;
+  }
+  @media screen and (max-width: 410px) {
+    min-width: 350px;
+  }
+  @media screen and (max-width: 290px) {
+    min-width: 250px;
+  }
+}
+
+.edit__right {
+  position: relative;
+
+  .img_wrapper {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+
+    @media screen and (max-width: 410px) {
+      top: 5rem;
+      right: auto;
+      left: 0;
+    }
+  }
+
+  .upload_icon {
+    @include flex();
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    font-size: 4rem;
+    color: #ebebeb;
+    background-color: rgba(0, 0, 0, 0.4);
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+    @include mobile {
+      opacity: 1;
+    }
+    svg {
+      cursor: pointer;
+    }
+  }
+
+  .img_wrapper:hover .upload_icon,
+  .img_wrapper:active .upload_icon {
+    opacity: 1;
+  }
+
+  .file_input_control {
+    .file_input {
+      position: absolute;
+      top: 35%;
+      opacity: 0;
+      padding: 2rem 0;
+    }
+  }
+}
+
+.img_wrapper {
+  @include flex(stretch, center);
+  align-self: center;
+  margin-bottom: 2rem;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  overflow: hidden;
+  box-shadow: $mainBoxShadow;
+
+  @media screen and (max-width: 410px) {
+    width: 150px;
+    height: 150px;
+    align-self: flex-start;
+  }
+}
+
+.avatar {
+  object-fit: cover;
+}
+
+.account {
+  @include flex(baseline, center);
+  flex-direction: column;
+  flex: 1;
+  margin: 3rem;
+  @media screen and (max-width: 1250px) {
+    margin: 3rem 0.5rem;
+  }
+
+  @media screen and (max-width: 410px) {
+    position: relative;
+  }
+  &__info {
+    color: lightslategray;
+    margin-bottom: 2rem;
+
+    & > div {
+      @include flex(center, flex-start);
+      color: var(--text-color);
+      margin: 0.5rem 1rem;
+
+      & > div {
+        margin: 0.5rem 1rem;
+      }
+    }
+  }
+
+  &__contact__phone div {
+    direction: ltr;
+  }
+
+  &__contact__email svg {
+    margin: 0 0.2rem;
+  }
+
+  .subTitle {
+    @include flex();
+    font-size: 36px;
+    font-weight: 400;
+    margin-top: 2rem;
+    margin-bottom: 7rem;
+
+    @media screen and (max-width: 410px) {
+      margin-bottom: 14rem;
+    }
+  }
+}
+
+.btn__wrapper {
+  @include flex(center, space-between);
+  flex-wrap: wrap;
+
+  & a {
+    flex: 1;
+    margin: 0.5rem 0;
+  }
+  & button {
+    width: 90%;
+
+    @include tablet {
+      margin: 0;
+    }
+  }
+}
+
+html[dir="rtl"] {
+  input[type="tel"] {
+    text-align: right;
+    direction: ltr;
+  }
+
+  .edit__right {
+    .img_wrapper {
+      right: auto;
+      left: 1rem;
+
+      @media screen and (max-width: 410px) {
+        right: 0;
+        left: auto;
+      }
+    }
+  }
+}

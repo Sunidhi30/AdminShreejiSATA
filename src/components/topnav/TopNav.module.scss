@@ -1,0 +1,51 @@
+@use "../../scss/abstracts/" as *;
+
+.topNav {
+  display: flex;
+  flex-wrap: wrap;
+  padding-bottom: 1rem;
+  border-bottom: 3px solid gainsboro;
+  margin-bottom: 4rem;
+  &_left {
+    @include flex(center, flex-start);
+    flex-wrap: wrap;
+    flex: 1;
+
+    &_menu_icon {
+      cursor: pointer;
+      @include tablet {
+        display: none;
+      }
+    }
+    &_menu {
+      display: none;
+      @include tablet {
+        display: block;
+      }
+    }
+  }
+
+  &_right {
+    flex: 1;
+  }
+}
+.search_desktop_wrapper {
+  flex: 1;
+  @media screen and (max-width: 975px) {
+    display: none;
+  }
+}
+.search_tablet_wrapper {
+  flex: 1 1 500px;
+  display: none;
+  @media screen and (max-width: 975px) {
+    display: block;
+    margin: 0.5rem 0 0;
+  }
+}
+
+html[dir="rtl"] {
+  .topNav_left_menu_icon {
+    transform: rotate(180deg);
+  }
+}

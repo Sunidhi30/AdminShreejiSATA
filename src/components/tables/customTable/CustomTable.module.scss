@@ -1,0 +1,166 @@
+@use "../../../scss/abstracts/" as *;
+
+.container {
+  padding: 0 1rem 2rem;
+}
+
+.wrapper {
+  @include flex();
+  flex-direction: column;
+  flex: 1;
+}
+
+.table__wrapper {
+  @include flex(center, flex-start);
+  width: 100%;
+  min-width: 400px;
+  flex: 1;
+  margin: 0;
+}
+
+.table {
+  width: 100%;
+  min-width: 300px;
+  border-spacing: 0;
+}
+
+.largeTable {
+  border-spacing: 0;
+  min-width: 900px;
+  width: 100%;
+}
+
+th {
+  background-color: var(--primaryColor);
+  color: var(--card-bgc);
+  text-align: left;
+  white-space: wrap;
+  &:first-child {
+    border-top-left-radius: $largeBorderRadius;
+  }
+  &:last-child {
+    border-top-right-radius: $largeBorderRadius;
+  }
+}
+
+tr:nth-child(odd) {
+  background-color: var(--card-bgc);
+}
+
+th,
+td {
+  padding: 0.8rem 1rem;
+  white-space: nowrap;
+}
+
+.userName,
+.product_name {
+  @include flex(center, flex-start);
+}
+
+.avatar,
+.product_img {
+  width: 30px;
+  height: 30px;
+  object-fit: cover;
+  border-radius: 50%;
+  display: inline-block;
+  margin: 0 0.5rem;
+}
+
+.actions {
+  width: 20px;
+  text-align: center;
+  position: relative;
+  &__box {
+    // display: none;
+    @include flex(center, space-between);
+    position: absolute;
+    top: 20%;
+    right: 53%;
+    background-color: var(--bgc);
+    box-shadow: $mainBoxShadow;
+    border-radius: $smallBorderRadius;
+    width: 100px;
+    padding: 0.4rem 1.2rem 0;
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: all 0.3s ease-in-out;
+
+    & svg {
+      transition: all 0.1s ease-in-out;
+
+      &:hover,
+      &:active,
+      &:visited {
+        -webkit-filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.3));
+        filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.3));
+      }
+    }
+  }
+
+  &:hover &__box,
+  &:active &__box {
+    transform: scaleX(1);
+  }
+
+  &__edit {
+    color: var(--approved-textColor);
+    cursor: pointer;
+  }
+
+  &__delete {
+    color: var(--rejected-textColor);
+    cursor: pointer;
+  }
+}
+
+.table__pagination {
+  @include flex(center, flex-end);
+  width: 100%;
+  margin-top: 20px;
+
+  &_item ~ &_item {
+    margin-left: 10px;
+  }
+
+  &_item {
+    @include flex();
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+  }
+
+  &_item.active,
+  &_item.active:hover {
+    background-color: var(--primaryColor);
+    color: #ebebeb;
+    font-weight: 600;
+  }
+
+  &_item:hover {
+    color: var(--primaryColor);
+    font-weight: 600;
+  }
+}
+
+html[dir="rtl"] {
+  th {
+    text-align: right;
+    &:first-child {
+      border-top-right-radius: $largeBorderRadius;
+      border-top-left-radius: 0;
+    }
+    &:last-child {
+      border-top-left-radius: $largeBorderRadius;
+      border-top-right-radius: 0;
+    }
+  }
+  .actions__box {
+    right: auto;
+    left: 53%;
+    transform-origin: left;
+  }
+}

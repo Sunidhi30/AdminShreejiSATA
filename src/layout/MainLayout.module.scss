@@ -1,0 +1,52 @@
+@use "../scss/abstracts/" as *;
+
+.container {
+  display: flex;
+}
+
+.main {
+  background-color: var(--card-bgc);
+  overflow-x: hidden;
+  flex-grow: 1;
+
+  &__content {
+    min-height: 100vh;
+    padding: 1rem 2.5rem 1rem 17rem;
+    transition: all 0.5s ease-in-out;
+    @include tablet {
+      padding: 1rem;
+    }
+    &.close_sidebar {
+      padding: 1rem 2.5rem 1rem 6rem;
+      @include tablet {
+        padding: 1rem;
+      }
+    }
+
+    @include tablet {
+      // padding: 0.8rem 2rem;
+      position: relative;
+      background-color: var(--card-bgc);
+      z-index: 100;
+    }
+
+    @include mobile {
+      padding: 1rem;
+    }
+  }
+}
+
+html[dir="rtl"] {
+  .main__content {
+    padding: 1rem 17rem 1rem 2.5rem;
+    &.close_sidebar {
+      padding: 1rem 6rem 1rem 2rem;
+      @include tablet {
+        padding: 0.8rem 2rem 0.8rem 2rem;
+      }
+    }
+    @include tablet {
+      padding: 0.8rem 2rem;
+    }
+  }
+}

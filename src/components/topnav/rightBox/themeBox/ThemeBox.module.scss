@@ -1,0 +1,28 @@
+@use "../../../../scss/abstracts/" as *;
+.themeBox {
+  width: 40px;
+  height: 22px;
+  background-color: var(--text-color);
+  border-radius: 30px;
+  padding: 1px;
+  position: relative;
+  margin: 0 2rem;
+  cursor: pointer;
+  @include mobile {
+    margin: 0;
+  }
+}
+
+.toggle {
+  width: 18px;
+  height: 18px;
+  background-color: var(--card-bgc);
+  border-radius: 50%;
+  position: absolute;
+  left: 2px;
+  top: 2px;
+  transition: all 0.3s ease-in-out;
+  &.darkMode {
+    left: 50%;
+  }
+}

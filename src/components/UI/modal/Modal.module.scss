@@ -1,0 +1,76 @@
+@use "../../../scss/abstracts/" as *;
+
+.backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  z-index: 10;
+  background: rgba(0, 0, 0, 0.75);
+}
+
+.modal {
+  position: fixed;
+  top: 30vh;
+  left: 30%;
+  width: 50%;
+  min-width: 500px;
+  max-width: 700px;
+  z-index: 100;
+  overflow: auto;
+  border-radius: $largeBorderRadius;
+  background-color: var(--bgc);
+}
+
+.header {
+  background: var(--primaryColor);
+  padding: 1rem;
+}
+
+.header h3 {
+  margin: 0;
+  color: white;
+}
+
+.content {
+  padding: 1rem;
+}
+
+.actions {
+  padding: 1rem;
+  display: flex;
+  justify-content: flex-end;
+
+  .delete {
+    font: inherit;
+    border-radius: $smallBorderRadius;
+    padding: 0.8rem 3rem;
+    cursor: pointer;
+    margin: 0 0.5rem;
+    background-color: #9d0e0e;
+    border: none;
+    color: gainsboro;
+
+    &:hover,
+    &:active {
+      background-color: darken(#9d0e0e, 10%);
+    }
+
+    &:focus {
+      outline: none;
+    }
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .backdrop {
+    z-index: 1000;
+  }
+  .modal {
+    left: calc(50% - 11.5rem);
+    width: 23rem;
+    min-width: auto;
+    z-index: 1000;
+  }
+}

@@ -1,0 +1,36 @@
+@use "../../../scss/abstracts/index" as *;
+
+.btn {
+  font: inherit;
+  border-radius: $smallBorderRadius;
+  padding: 0.8rem 3rem;
+  cursor: pointer;
+  margin: 0 0.5rem;
+}
+
+.button {
+  border: none;
+  background: var(--secondaryColor);
+  color: gainsboro;
+
+  &:hover,
+  &:active {
+    background-color: darken(#3c4b6d, 10%);
+  }
+
+  &:focus {
+    outline: none;
+  }
+}
+
+.outline {
+  background-color: transparent;
+  border: 1px solid var(--secondaryColor);
+  color: var(--text-color);
+}
+
+html[dir="rtl"] {
+  .btn {
+    font-family: iranyekan, "IRANSans", "Tahoma";
+  }
+}

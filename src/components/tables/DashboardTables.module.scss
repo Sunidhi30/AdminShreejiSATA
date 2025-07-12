@@ -1,0 +1,43 @@
+@use "../../scss/abstracts/" as *;
+
+.table {
+  @include flex(stretch, flex-start);
+  flex-wrap: wrap;
+  margin: 3rem 0;
+  font-size: 14px;
+  margin-left: -2rem;
+  margin-right: -2rem;
+
+  &__child {
+    padding: 0 1rem;
+  }
+  &__top__customers {
+    min-width: 550px;
+    flex: 2;
+    @media screen and (max-width: 1024px) {
+      min-width: 400px;
+    }
+    @media screen and (max-width: 425px) {
+      min-width: 246px;
+    }
+  }
+  &__latest__orders {
+    min-width: 650px;
+    flex: 3;
+    @media screen and (max-width: 1024px) {
+      min-width: 400px;
+    }
+    @media screen and (max-width: 425px) {
+      min-width: 246px;
+    }
+  }
+}
+
+.table__title {
+  @include flex(center, space-between);
+  padding: 0 1rem;
+  & a {
+    margin-bottom: 1rem;
+    color: rgb(0, 132, 255);
+  }
+}
