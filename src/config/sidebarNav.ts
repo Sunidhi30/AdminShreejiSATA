@@ -33,7 +33,7 @@ const sidebarNav = [
   {
     link: "/discount",
     section: "Notices",
-    icon: "nimbus:discount-circle",
+    icon: "bi:chat-dots",
     text: "Discount",
   },
   {
