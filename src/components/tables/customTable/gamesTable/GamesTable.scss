@@ -1,0 +1,105 @@
+
+@use "../../../../scss/abstracts" as *;
+
+
+
+
+.games-table {
+    padding: 1rem;
+    background: var(--bgc); // Customer table background
+    border-radius: $largeBorderRadius;
+    box-shadow: $mainBoxShadow;
+  
+    h2 {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      color: var(--primary-textColor); // Same as customer table heading color
+    }
+  
+    table {
+      width: 100%;
+      border-spacing: 0;
+      border-collapse: collapse;
+  
+      th {
+        background: var(--primaryColor); // Use customer table primary color for header
+        color: var(--card-bgc); // Customer table header text color
+        font-weight: 600;
+        text-align: left;
+        padding: 0.8rem 1rem;
+  
+        &:first-child {
+          border-top-left-radius: $largeBorderRadius;
+        }
+  
+        &:last-child {
+          border-top-right-radius: $largeBorderRadius;
+        }
+      }
+  
+      td {
+        background: var(--card-bgc); // Customer table row background
+        color: var(--secondary-textColor); // Text color
+        border-bottom: 1px solid var(--borderColor); // Customer table border color
+        padding: 0.8rem 1rem;
+  
+        &:first-child {
+          display: flex;
+          align-items: center;
+        }
+      }
+  
+      tr:nth-child(odd) {
+        background: var(--alt-bgc); // Alternate row color
+      }
+    }
+  
+    .status-icon.active {
+      color: var(--approved-textColor); // e.g., green
+    }
+  
+    .status-icon.inactive {
+      color: var(--rejected-textColor); // e.g., red
+    }
+  
+    .type-icon.regular {
+      color: var(--primaryColor); // blue for "regular"
+    }
+  
+    .type-icon.premium {
+      color: var(--warning-textColor); // yellow/orange for "premium"
+    }
+  
+    .actions {
+      position: relative;
+  
+      &__box {
+        background: var(--bgc);
+        box-shadow: $mainBoxShadow;
+        border-radius: $smallBorderRadius;
+        padding: 0.4rem 1rem;
+        transform: scaleX(0);
+        transform-origin: right;
+        transition: all 0.3s ease-in-out;
+  
+        & svg:hover {
+          filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.3));
+        }
+      }
+  
+      &:hover &__box {
+        transform: scaleX(1);
+      }
+  
+      &__edit {
+        color: var(--approved-textColor);
+        cursor: pointer;
+      }
+  
+      &__delete {
+        color: var(--rejected-textColor);
+        cursor: pointer;
+      }
+    }
+  }
+  

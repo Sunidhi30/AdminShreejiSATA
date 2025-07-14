@@ -1,93 +1,98 @@
-import React, { useState, useRef, useEffect } from "react";
-import { useTranslation } from "react-i18next";
-import useFetch from "../hook/useFetch";
-import CustomTable from "../components/tables/customTable/CustomTable";
-import { IProductsTable } from "../interfaces/Itable";
-import { products, productsHeader } from "../constants/tables";
-import LoadingSpinner from "../components/UI/loadingSpinner/LoadingSpinner";
-import Dropdown from "../components/UI/dropdown/Dropdown";
 
-const url =
-  "https://admin-panel-79c71-default-rtdb.europe-west1.firebasedatabase.app/products.json";
+import React, { useEffect, useState } from "react";
+import GamesTable from "../components/tables/customTable/gamesTable/GameTable"; // ✅ Import the GamesTable
 
-const dropdownOptions = [
-  { label: "all", value: "all" },
-  { label: "digital", value: "digital" },
-  { label: "clothing", value: "clothing" },
-  { label: "beauty", value: "beauty" },
-];
-function Products() {
-  const { t } = useTranslation();
-  const [selected, setSelected] = useState(dropdownOptions[0].value);
-  const { data, error, status } = useFetch<IProductsTable[]>(url);
-  let productsTable;
-  let tableData: IProductsTable[] | undefined;
 
-  function selectedChangeHandler(e: React.ChangeEvent<HTMLSelectElement>) {
-    setSelected(() => e.target.value);
-  }
+interface Game {
+  name: string;
+  openTime: string;
+  closeTime: string;
+  resultTime: string;
+  status: string;
+  type: string;
+  singleDigit: number;
+  jodiDigit: number;
+}
 
-  if (status === "loading") {
-    productsTable = <LoadingSpinner />;
-  }
+const Products: React.FC = () => {
+  const [games, setGames] = useState<Game[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  if (error) {
-    //if fetch has error:
-    //select data from local file ("../constants/tables.ts")
-    switch (selected) {
-      case "digital":
-        tableData = products?.filter((item) => item.category === selected);
-        break;
-      case "clothing":
-        tableData = products?.filter((item) => item.category === selected);
-        break;
-      case "beauty":
-        tableData = products?.filter((item) => item.category === selected);
-        break;
-      default:
-        tableData = products;
-    }
+  useEffect(() => {
+    const fetchGames = async () => {
+      try {
+        const token = localStorage.getItem("adminToken");
+        const response = await fetch("http://localhost:9000/api/admin/games", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
 
-    productsTable = (
-      <CustomTable headData={productsHeader} bodyData={tableData} limit={10} />
+        if (!response.ok) {
+          throw new Error("Failed to fetch games");
+        }
+
+        const data = await response.json();
+
+        if (data.success && Array.isArray(data.games)) {
+          const mappedGames: Game[] = data.games.map((game: any) => ({
+            name: game.name,
+            openTime: game.openTime,
+            closeTime: game.closeTime,
+            resultTime: game.resultTime,
+            status: game.status,
+            type: game.gameType,
+            singleDigit: game.rates.singleDigit,
+            jodiDigit: game.rates.jodiDigit,
+          }));
+          setGames(mappedGames);
+        } else {
+          throw new Error("Invalid API response");
+        }
+      } catch (err: any) {
+        console.error("Error fetching games:", err);
+        setError(err.message || "Something went wrong");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchGames();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="loading-container">
+        <div className="loading-spinner"></div>
+        <span>Loading games...</span>
+      </div>
     );
   }
 
-  if (status === "fetched" && data) {
-    switch (selected) {
-      case "digital":
-        tableData = data?.filter((item) => item.category === selected);
-        break;
-      case "clothing":
-        tableData = data?.filter((item) => item.category === selected);
-        break;
-      case "beauty":
-        tableData = data?.filter((item) => item.category === selected);
-        break;
-      default:
-        tableData = data;
-    }
-
-    productsTable = (
-      <CustomTable
-        selectedCategory={selected}
-        headData={productsHeader}
-        bodyData={tableData}
-        limit={10}
-      />
+  if (error) {
+    return (
+      <div className="error-container">
+        <div className="error-message">
+          <span>Error: {error}</span>
+        </div>
+      </div>
     );
   }
 
   return (
-    <section>
-      <h2 className="title">{t("products")}</h2>
-      {/* <Dropdown
-        dropdownData={dropdownOptions}
-        onChange={selectedChangeHandler}
-      /> */}
-      {productsTable}
-    </section>
+    <div className="products-container">
+      {/* <div className="products-header">
+        <h1>Games Dashboard</h1>
+        <p>Monitor and manage all gaming activities</p>
+      </div> */}
+      <GamesTable games={games} />
+    </div>
   );
-}
+};
+
+
 
 export default Products;

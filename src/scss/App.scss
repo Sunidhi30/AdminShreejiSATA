@@ -1,2 +1,7 @@
 @forward './global';
 @forward './flex-grid';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+// Your other SCSS code here
