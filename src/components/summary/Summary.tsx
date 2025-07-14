@@ -1,27 +1,26 @@
 
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { IsummData } from "../../interfaces/IsummData";
 import classes from "./Summary.module.scss";
 import SummaryBox from "./SummaryBox";
 
 const summaryData: IsummData[] = [
- 
- 
   {
     icon: "lucide:user",
     text: "Total Users",
-    amount: "salesAmount",
+    amount: "salesAmount", // Placeholder
     currency: "",
   },
   {
     icon: "mdi:wallet",
     text: "Total bid amount",
-    amount: "orderAmount",
+    amount: "orderAmount", // Placeholder
     currency: "currency",
   },
   {
     icon: "mdi:currency-inr",
-    text: "thisMonthRevenue",
+    text: "Total Revenue", // Total revenue placeholder
     amount: "revenueAmount",
     currency: "currency",
   },
@@ -29,11 +28,65 @@ const summaryData: IsummData[] = [
 
 function Summary() {
   const { t } = useTranslation();
+  const [userCount, setUserCount] = useState<number | null>(null);
+  const [totalBidAmount, setTotalBidAmount] = useState<number | null>(null);
+  const [adminEarnings, setAdminEarnings] = useState<number | null>(null);
+
+  useEffect(() => {
+    const fetchUserCount = async () => {
+      try {
+        const response = await fetch("http://localhost:9000/api/admin/users-count");
+        const data = await response.json();
+        setUserCount(data.count);
+      } catch (error) {
+        console.error("Error fetching user count:", error);
+      }
+    };
+
+    const fetchTotalBidAmount = async () => {
+      try {
+        const response = await fetch("http://localhost:9000/api/admin/total-bid-amount");
+        const data = await response.json();
+        setTotalBidAmount(data.totalBidAmount);
+      } catch (error) {
+        console.error("Error fetching total bid amount:", error);
+      }
+    };
+
+    const fetchAdminEarnings = async () => {
+      try {
+        const response = await fetch("http://localhost:9000/api/admin/admin-earnings");
+        const data = await response.json();
+        setAdminEarnings(data.adminEarnings);
+      } catch (error) {
+        console.error("Error fetching admin earnings:", error);
+      }
+    };
+
+    fetchUserCount();
+    fetchTotalBidAmount();
+    fetchAdminEarnings();
+  }, []);
+
+  // Clone summaryData and inject API values
+  const updatedSummaryData = summaryData.map((item) => {
+    if (item.text === "Total Users" && userCount !== null) {
+      return { ...item, amount: userCount.toString() };
+    }
+    if (item.text === "Total bid amount" && totalBidAmount !== null) {
+      return { ...item, amount: totalBidAmount.toString() };
+    }
+    if (item.text === "Total Revenue" && adminEarnings !== null) {
+      return { ...item, amount: adminEarnings.toString() };
+    }
+    return item;
+  });
+
   return (
     <section className={classes.summary}>
       <p className="subTitle">{t("summary")}</p>
       <div className={classes.summary__box}>
-        {summaryData.map((item) => (
+        {updatedSummaryData.map((item) => (
           <SummaryBox key={item.text} item={item} />
         ))}
       </div>
