@@ -1,143 +1,354 @@
+
 @use "../../scss/abstracts/" as *;
 @use "sass:math";
+
+// Variables
+:root {
+  --sidebar-width: #{$sideBarOpenWidth};
+  --sidebar-collapsed-width: 60px;
+  --submenu-indent: 2rem;
+  --item-padding: 0.8rem 1rem;
+  --transition-speed: 0.3s;
+}
 
 .sidebar {
   @include flex(stretch, center);
   flex-direction: column;
   background-color: var(--bgc);
-  color: var(--text-color) !important;
-  // border: 1px solid blue;
-  width: $sideBarOpenWidth;
+  color: var(--text-color);
+  width: var(--sidebar-width);
   height: 100vh;
   position: fixed;
   top: 0;
-  transition: all 0.5s ease-in-out;
+  transition: all var(--transition-speed) cubic-bezier(0.4, 0, 0.2, 1);
   z-index: 200;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
   overflow-y: auto;
   overflow-x: hidden;
 
+  // Scrollbar styling
+  &::-webkit-scrollbar {
+    width: 6px;
+    &-track { background: transparent; }
+    &-thumb {
+      background: var(--primaryColor);
+      border-radius: 3px;
+    }
+  }
+
+  // Collapsed state
   &.sidebar_close {
-    width: 50px;
+    width: var(--sidebar-collapsed-width);
+    
+    .sidebar__menu__item__txt,
+    .sidebar__submenu {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    .sidebar__logo img {
+      transform: scale(0.8);
+    }
+
     @include tablet {
       width: 100%;
     }
   }
 
-  @include tablet {
-    width: 100vw;
-    z-index: 1;
-    background-color: var(--secondaryColor);
-    color: #ebebeb !important;
-  }
-
+  // Logo section
   &__logo {
-    // @include flex();
-    // width: $sideBarLogoHeight;
     text-align: center;
-    padding: 0 12px 2rem;
-
+    padding: 1.5rem 12px;
+    margin-bottom: 1rem;
+    
     img {
       --size: 7.5rem;
       width: var(--size);
       height: var(--size);
-    }
-
-    @include tablet {
-      padding-top: 1rem;
-    }
-    @include mobile {
-      padding-top: 0.5rem;
+      transition: transform var(--transition-speed) ease;
     }
   }
 
+  // Menu section
   &__menu {
     @include flex(stretch, flex-start);
     flex-direction: column;
     flex-grow: 1;
+    padding: 0 0.5rem;
 
+    // Menu items
     &__item {
       @include flex(center, flex-start);
       position: relative;
-      margin-bottom: 2rem;
-      padding-left: 16px;
-      transition: all 0.3s ease-in-out;
+      margin-bottom: 0.8rem;
+      padding: var(--item-padding);
+      border-radius: 8px;
+      transition: all 0.2s ease-in-out;
+      cursor: pointer;
 
-      &:hover {
-        color: var(--primaryColor);
-      }
-
-      &.active {
-        font-weight: 700;
-        color: var(--primaryColor);
-        padding-left: 20px;
-
-        &::before {
-          content: "";
-          width: 4px;
-          height: 100%;
-          background-color: var(--primaryColor);
-          border-top-right-radius: 3px;
-          border-bottom-right-radius: 3px;
-          position: absolute;
-          left: 0;
-          top: 0;
+      // Games section specific styling
+      &[data-section="games"] {
+        margin-bottom: 0;
+        
+        &.active {
+          background-color: rgba(var(--primaryColor-rgb), 0.15);
+          border-radius: 8px 8px 0 0;
         }
       }
 
+      &:hover {
+        color: var(--primaryColor);
+        background-color: rgba(var(--primaryColor-rgb), 0.1);
+      }
+
+      &.active {
+        font-weight: 600;
+        color: var(--primaryColor);
+        background-color: rgba(var(--primaryColor-rgb), 0.15);
+
+        &::before {
+          content: "";
+          position: absolute;
+          left: -0.5rem;
+          top: 15%;
+          width: 4px;
+          height: 70%;
+          background-color: var(--primaryColor);
+          border-radius: 3px;
+        }
+      }
+
+      // Icon styling
       &__icon {
         @include flex(center, center);
         margin-right: 1rem;
+        min-width: $smallIconSize;
 
         svg {
           width: $smallIconSize;
           height: $smallIconSize;
+          transition: transform 0.2s ease;
         }
       }
+
+      // Text styling
       &__txt {
         white-space: nowrap;
+        transition: opacity var(--transition-speed) ease,
+                    visibility var(--transition-speed) ease;
+      }
+
+      // Chevron styling
+      &__chevron {
+        margin-left: auto;
+        padding: 4px;
+        border-radius: 50%;
+        transition: all var(--transition-speed) ease;
+        
+        svg {
+          width: 20px;
+          height: 20px;
+          color: var(--primaryColor);
+        }
+
+        &.open {
+          transform: rotate(-180deg);
+          background-color: rgba(var(--primaryColor-rgb), 0.1);
+        }
+      }
+    }
+  }
+
+  // Submenu styling
+// Update this section in your SCSS file
+
+  // Submenu styling
+  &__submenu {
+    position: relative;
+    margin: 0.2rem 0 1rem var(--submenu-indent);
+    padding: 0.5rem;
+    border-left: 1px solid rgba(var(--primaryColor-rgb), 0.2);
+
+    &::before {
+      content: '';
+      position: absolute;
+      left: -2px;
+      top: -5px;
+      width: 10px;
+      height: 2px;
+      background-color: rgba(var(--primaryColor-rgb), 0.2);
+    }
+
+    &__item {
+      display: block;
+      padding: 0.8rem 1rem;
+      margin-bottom: 0.3rem;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      color: var(--text-color);
+      transition: all 0.2s ease;
+      position: relative;
+
+      &::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background-color: var(--primaryColor);
+        opacity: 0;
+        transition: all 0.2s ease;
+      }
+
+      &:hover {
+        color: var(--primaryColor);
+        padding-left: 1.5rem;
+
+        &::before {
+          opacity: 1;
+        }
+      }
+
+      &.active {
+        color: var(--primaryColor);
+        font-weight: 500;
+        padding-left: 1.5rem;
+
+        &::before {
+          opacity: 1;
+        
+        }
+      }
+    }
+  }
+
+  // Logout section
+  .logout {
+    margin-top: auto;
+    padding: 1rem 0.5rem;
+    border-top: 1px solid rgba(var(--text-color-rgb), 0.1);
+
+    .sidebar__menu__item {
+      margin-bottom: 0;
+      
+      &:hover {
+        background-color: rgba(255, 0, 0, 0.1);
+        color: #ff3333;
       }
     }
   }
 }
 
-.logout {
-  align-self: flex-end;
+// Responsive styles
+@include tablet {
+  .sidebar {
+    width: 100vw;
+    z-index: 1000;
+    background-color: var(--secondaryColor);
+    color: #ebebeb;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+
+    &__logo {
+      padding-top: 1rem;
+    }
+
+    &__submenu {
+      margin-left: 1rem;
+      margin-right: 1rem;
+    }
+  }
 }
 
+@include mobile {
+  .sidebar {
+    &__logo {
+      padding-top: 0.5rem;
+    }
+
+    &__submenu {
+      margin-left: 0.5rem;
+      margin-right: 0.5rem;
+    }
+  }
+}
+
+// RTL Support
 html[dir="rtl"] {
   .sidebar {
     &__menu {
       &__item {
         padding-left: 0;
-        // padding-right: 16px;
-        // font-weight: 500;
+        padding-right: 1rem;
         font-size: 18px;
-        // margin-bottom: 1.5rem;
-        &.active {
-          padding-right: 4px;
-          font-weight: 700;
-          &::before {
-            border-top-right-radius: 0;
-            border-bottom-right-radius: 0;
-            border-top-left-radius: 3px;
-            border-bottom-left-radius: 3px;
-            right: 0;
-          }
+
+        &.active::before {
+          left: auto;
+          right: -0.5rem;
         }
 
         &__icon {
+          margin-right: 0;
           margin-left: 1rem;
+        }
+
+        &__chevron {
+          margin-left: 0;
+          margin-right: auto;
         }
       }
     }
+
+    &__submenu {
+      margin: 0.2rem 2rem 1rem 0;
+      border-left: none;
+      border-right: 2px solid rgba(var(--primaryColor-rgb), 0.2);
+      padding-left: 0;
+      padding-right: calc($smallIconSize + 2rem);
+
+      &::before {
+        left: auto;
+        right: -2px;
+      }
+
+      &__item {
+        &::before {
+          left: auto;
+          right: 0;
+        }
+
+        &:hover, &.active {
+          padding-left: 1rem;
+          padding-right: 1.5rem;
+        }
+      }
+    }
+
     &.sidebar_close .sidebar__logo {
       direction: ltr;
       width: 46px;
       margin-right: 10px;
       overflow: hidden;
+      
       @include tablet {
         direction: rtl;
         width: auto;
+      }
+    }
+  }
+}
+
+// Dark mode support
+[data-theme="dark"] {
+  .sidebar {
+    &__submenu {
+      background-color: rgba(255, 255, 255, 0.05);
+      border-color: rgba(255, 255, 255, 0.1);
+
+      &::before {
+        background-color: rgba(255, 255, 255, 0.1);
       }
     }
   }

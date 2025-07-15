@@ -1,8 +1,9 @@
+
 const sidebarNav = [
   {
     link: "/",
     section: "dashboard",
-    icon: "lucide:layout-dashboard", //width:"20"
+    icon: "lucide:layout-dashboard",
     text: "Dashboard",
   },
   {
@@ -12,17 +13,62 @@ const sidebarNav = [
     text: "Customers",
   },
   {
-    link: "/products",
-    section: "Games",
+    // Remove direct link here because it's a parent now
+    section: "Games ",
     icon: "icon-park-outline:ad-product",
-    text: "Users",
+    text: "Games",
+    children: [
+      {
+        section: "Games List",
+        link: "/products", 
+      },
+      
+{
+    section: "Games Rate",
+    link: "/games-rate", 
+},
+       {
+        section: "Games Results",
+        link: "/game-results", 
+      },
+    ],
   },
-  
   {
-    link: "/orders",
+    // Remove direct link here because it's a parent now
     section: "Reports",
-    icon: "icon-park-outline:transaction-order",
-    text: "Orders",
+    icon: "mdi:file-chart-outline",
+    text: "Reports",
+    children: [
+      {
+        section: "Winner Prediction",
+        link: "/products", 
+      },
+      
+{
+    section: "Profit/Loss",
+    link: "/games-rate", 
+},
+       {
+        section: "Winning details",
+        link: "/game-results", 
+      },
+       {
+        section: "Bet Filter",
+        link: "/game-results", 
+      },
+       {
+        section: "Customer Sell Report",
+        link: "/game-results", 
+      },
+       {
+        section: "Bid History",
+        link: "/game-results", 
+      },
+      {
+        section: "Withdrawal Report",
+        link: "/game-results", 
+      },
+    ],
   },
   {
     link: "/analytics",

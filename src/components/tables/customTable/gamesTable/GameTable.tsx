@@ -1,78 +1,6 @@
 
-// import { Pause, Play, TrendingUp, Trophy } from "lucide-react";
-// import React from "react";
-// import "./GamesTable.scss"; // Import SCSS for styling
-
-// interface Game {
-//   name: string;
-//   openTime: string;
-//   closeTime: string;
-//   resultTime: string;
-//   status: string;
-//   type: string;
-//   singleDigit: number;
-//   jodiDigit: number;
-// }
-
-// interface GamesTableProps {
-//   games: Game[];
-// }
-
-// const GamesTable: React.FC<GamesTableProps> = ({ games }) => {
-//   const getStatusIcon = (status: string) =>
-//     status === "active" ? (
-//       <Play className="status-icon active" />
-//     ) : (
-//       <Pause className="status-icon inactive" />
-//     );
-
-//   const getTypeIcon = (type: string) =>
-//     type === "regular" ? (
-//       <TrendingUp className="type-icon regular" />
-//     ) : (
-//       <Trophy className="type-icon premium" />
-//     );
-
-//   return (
-//     <div className="games-table">
-//       {/* <h2>Games Overview</h2> */}
-//       <table>
-//         <thead>
-//           <tr>
-//             <th>Game</th>
-//             <th>Timing</th>
-//             <th>Rates</th>
-//             <th>Status</th>
-//           </tr>
-//         </thead>
-//         <tbody>
-//           {games.map((game, index) => (
-//             <tr key={index}>
-//               <td>
-//                 {getTypeIcon(game.type)} {game.name}
-//               </td>
-//               <td>
-//                 Open: {game.openTime} <br />
-//                 Close: {game.closeTime} <br />
-//                 Result: {game.resultTime}
-//               </td>
-//               <td>
-//                 Single: {game.singleDigit} <br />
-//                 Jodi: {game.jodiDigit}
-//               </td>
-//               <td>
-//                 {getStatusIcon(game.status)} {game.status}
-//               </td>
-//             </tr>
-//           ))}
-//         </tbody>
-//       </table>
-//     </div>
-//   );
-// };
-
-import { Clock, DollarSign, Pause, Play, Target, TrendingUp, Trophy } from "lucide-react";
-import React from "react";
+import { Clock, DollarSign, Pause, Play, Plus, Target, TrendingUp, Trophy } from "lucide-react";
+import React, { useState } from "react";
 import "./GamesTable.scss";
 
 interface Game {
@@ -91,6 +19,69 @@ interface GamesTableProps {
 }
 
 const GamesTable: React.FC<GamesTableProps> = ({ games }) => {
+  const [showAddForm, setShowAddForm] = useState(false);
+  const [formData, setFormData] = useState({
+    name: '',
+    type: 'regular',
+    openTime: '',
+    closeTime: '',
+    resultTime: '',
+    status: 'active'
+  });
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
+  };
+const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+  try {
+    const adminToken = localStorage.getItem("adminToken"); // get token from localStorage
+    const response = await fetch('http://localhost:9000/api/admin/games', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${adminToken}`, // add token to header
+      },
+      body: JSON.stringify(formData),
+    });
+
+    if (response.ok) {
+      setShowAddForm(false);
+      // You might want to refresh your games list here
+    } else {
+      throw new Error('Failed to add game');
+    }
+  } catch (error) {
+    console.error('Error adding game:', error);
+  }
+};
+
+  // const handleSubmit = async (e: React.FormEvent) => {
+  //   e.preventDefault();
+  //   try {
+  //     const response = await fetch('http://localhost:9000/api/admin/games', {
+  //       method: 'POST',
+  //       headers: {
+  //         'Content-Type': 'application/json'
+  //         ,
+  //       },
+  //       body: JSON.stringify(formData),
+  //     });
+      
+  //     if (response.ok) {
+  //       setShowAddForm(false);
+  //       // You might want to refresh your games list here
+  //     } else {
+  //       throw new Error('Failed to add game');
+  //     }
+  //   } catch (error) {
+  //     console.error('Error adding game:', error);
+  //   }
+  // };
+
   const getStatusIcon = (status: string) =>
     status === "active" ? (
       <Play className="status-icon active" />
@@ -117,36 +108,7 @@ const GamesTable: React.FC<GamesTableProps> = ({ games }) => {
       singleDigit: 95,
       jodiDigit: 950
     },
-    {
-      name: "Delhi Bazaar",
-      openTime: "10:30 AM",
-      closeTime: "12:30 PM",
-      resultTime: "01:00 PM",
-      status: "inactive",
-      type: "premium",
-      singleDigit: 98,
-      jodiDigit: 980
-    },
-    {
-      name: "Kolkata Night",
-      openTime: "08:00 PM",
-      closeTime: "10:00 PM",
-      resultTime: "10:30 PM",
-      status: "active",
-      type: "regular",
-      singleDigit: 92,
-      jodiDigit: 920
-    },
-    {
-      name: "Goa Special",
-      openTime: "02:00 PM",
-      closeTime: "04:00 PM",
-      resultTime: "04:30 PM",
-      status: "active",
-      type: "premium",
-      singleDigit: 99,
-      jodiDigit: 990
-    }
+    // ... other sample games
   ];
 
   const displayGames = games.length > 0 ? games : sampleGames;
@@ -154,9 +116,94 @@ const GamesTable: React.FC<GamesTableProps> = ({ games }) => {
   return (
     <div className="games-table">
       <div className="games-table__header">
-        <h2>Games Dashboard</h2>
-        <p>Manage and monitor all gaming activities</p>
+        <div className="header-left">
+          <h2>Games Dashboard</h2>
+          <p>Manage and monitor all gaming activities</p>
+        </div>
+        <button 
+          className="add-game-btn"
+          onClick={() => setShowAddForm(true)}
+        >
+          <Plus size={20} />
+          Add Game
+        </button>
       </div>
+
+      {showAddForm && (
+        <div className="add-game-modal">
+          <div className="add-game-form">
+            <h2>Add New Game</h2>
+            <form onSubmit={handleSubmit}>
+              <div className="form-group">
+                <label>Game Name:</label>
+                <input
+                  type="text"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+
+              <div className="form-group">
+                <label>Game Type:</label>
+                <select name="type" value={formData.type} onChange={handleChange}>
+                  <option value="regular">Regular</option>
+                  <option value="premium">Premium</option>
+                </select>
+              </div>
+
+              <div className="form-group">
+                <label>Open Time:</label>
+                <input
+                  type="time"
+                  name="openTime"
+                  value={formData.openTime}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+
+              <div className="form-group">
+                <label>Close Time:</label>
+                <input
+                  type="time"
+                  name="closeTime"
+                  value={formData.closeTime}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+
+              <div className="form-group">
+                <label>Result Time:</label>
+                <input
+                  type="time"
+                  name="resultTime"
+                  value={formData.resultTime}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+
+              <div className="form-group">
+                <label>Status:</label>
+                <select name="status" value={formData.status} onChange={handleChange}>
+                  <option value="active">Active</option>
+                  <option value="inactive">Inactive</option>
+                </select>
+              </div>
+
+              <div className="form-actions">
+                <button type="submit" className="submit-btn">Add Game</button>
+                <button type="button" className="cancel-btn" onClick={() => setShowAddForm(false)}>
+                  Cancel
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
 
       <div className="games-table__wrapper">
         <table>
@@ -175,9 +222,7 @@ const GamesTable: React.FC<GamesTableProps> = ({ games }) => {
               <tr key={index}>
                 <td>
                   <div className="game-info">
-                    <div className="game-avatar">
-                      {game.name.charAt(0)}
-                    </div>
+                    <div className="game-avatar">{game.name.charAt(0)}</div>
                     <div className="game-details">
                       <div className="game-name">{game.name}</div>
                       <div className="game-type">
@@ -230,14 +275,6 @@ const GamesTable: React.FC<GamesTableProps> = ({ games }) => {
           </tbody>
         </table>
       </div>
-
-      {displayGames.length === 0 && (
-        <div className="empty-state">
-          <Trophy className="empty-icon" />
-          <h3>No Games Found</h3>
-          <p>There are no games to display at the moment.</p>
-        </div>
-      )}
     </div>
   );
 };

@@ -1,16 +1,17 @@
-import React, { useState, useEffect, useContext } from "react";
+import { Icon } from "@iconify/react";
+import { useContext, useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Link, useLocation } from "react-router-dom";
 import { useWindowSize } from "usehooks-ts";
-import { useTranslation } from "react-i18next";
-import { images } from "../../constants";
 import sidebarNav from "../../config/sidebarNav";
-import SidebarContext from "../../store/sidebarContext";
+import { images } from "../../constants";
 import LoginContext from "../../store/loginContext";
-import { Icon } from "@iconify/react";
+import SidebarContext from "../../store/sidebarContext";
 import classes from "./Sidebar.module.scss";
 
 function Sidebar() {
-  const [activeIndex, setActiveIndex] = useState(0);
+  const [activeIndex, setActiveIndex] = useState<number>(0);
+  const [openDropdown, setOpenDropdown] = useState<number | null>(null);
   const { width } = useWindowSize();
   const location = useLocation();
   const sidebarCtx = useContext(SidebarContext);
@@ -18,8 +19,6 @@ function Sidebar() {
   const { t } = useTranslation();
 
   function openSidebarHandler() {
-    //for width>768(tablet size) if sidebar was open in width<768 was opened too.
-    //just in case of tablet size and smaller then, sidebar__open can added.
     if (width <= 768) document.body.classList.toggle("sidebar__open");
   }
 
@@ -28,11 +27,23 @@ function Sidebar() {
     loginCtx.toggleLogin();
   }
 
+  function toggleDropdown(index: number) {
+    setOpenDropdown(openDropdown === index ? null : index);
+  }
+
   useEffect(() => {
     const curPath = window.location.pathname.split("/")[1];
-    const activeItem = sidebarNav.findIndex((item) => item.section === curPath);
-
-    setActiveIndex(curPath.length === 0 ? 0 : activeItem);
+    const activeItem = sidebarNav.findIndex((item) => {
+      if (item.link) {
+        return item.link.replace("/", "") === curPath;
+      } else if (item.children) {
+        return item.children.some(
+          (child) => child.link.replace("/", "") === curPath
+        );
+      }
+      return false;
+    });
+    setActiveIndex(activeItem >= 0 ? activeItem : 0);
   }, [location]);
 
   return (
@@ -42,29 +53,80 @@ function Sidebar() {
       }`}
     >
       <div className={classes.sidebar__logo}>
-        <img src={images.logo} alt="digikala" />
+        <img src={images.logo} alt="Logo" />
       </div>
+
       <div className={classes.sidebar__menu}>
         {sidebarNav.map((nav, index) => (
-          <Link
-            to={nav.link}
-            key={`nav-${index}`}
-            className={`${classes.sidebar__menu__item} ${
-              activeIndex === index && classes.active
-            }`}
-            onClick={openSidebarHandler}
-          >
-            <div className={classes.sidebar__menu__item__icon}>
-              <Icon icon={nav.icon} />
-            </div>
-            <div className={classes.sidebar__menu__item__txt}>
-              {t(nav.section)}
-            </div>
-          </Link>
+          <div key={`nav-${index}`}>
+            {nav.children ? (
+              <>
+                {/* Parent with dropdown */}
+                <div
+                  className={`${classes.sidebar__menu__item} ${
+                    activeIndex === index && classes.active
+                  }`}
+                  onClick={() => toggleDropdown(index)}
+                >
+                  <div className={classes.sidebar__menu__item__icon}>
+                    <Icon icon={nav.icon} />
+                  </div>
+                  <div className={classes.sidebar__menu__item__txt}>
+                    {t(nav.section)}
+                  </div>
+                  <div
+                    className={`${classes.sidebar__menu__item__chevron} ${
+                      openDropdown === index ? classes.open : ""
+                    }`}
+                  >
+                    <Icon
+                      icon={
+                        openDropdown === index
+                          ? "tabler:chevron-up"
+                          : "tabler:chevron-down"
+                      }
+                    />
+                  </div>
+                </div>
+
+                {/* Dropdown submenu */}
+                {openDropdown === index && (
+                  <div className={classes.sidebar__submenu}>
+                    {nav.children.map((child, childIdx) => (
+                      <Link
+                        to={child.link}
+                        key={`child-${childIdx}`}
+                        className={classes.sidebar__submenu__item}
+                        onClick={openSidebarHandler}
+                      >
+                        {child.section}
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </>
+            ) : (
+              // Normal link
+              <Link
+                to={nav.link!} // TypeScript-safe because no children
+                className={`${classes.sidebar__menu__item} ${
+                  activeIndex === index && classes.active
+                }`}
+                onClick={openSidebarHandler}
+              >
+                <div className={classes.sidebar__menu__item__icon}>
+                  <Icon icon={nav.icon} />
+                </div>
+                <div className={classes.sidebar__menu__item__txt}>
+                  {t(nav.section)}
+                </div>
+              </Link>
+            )}
+          </div>
         ))}
       </div>
 
-      <div className={[classes.sidebar__menu, classes.logout].join("")}>
+      <div className={[classes.sidebar__menu, classes.logout].join(" ")}>
         <Link
           to="/login"
           className={classes.sidebar__menu__item}
@@ -73,7 +135,9 @@ function Sidebar() {
           <div className={classes.sidebar__menu__item__icon}>
             <Icon icon="tabler:logout" />
           </div>
-          <div className={classes.sidebar__menu__item__txt}>{t("logout")}</div>
+          <div className={classes.sidebar__menu__item__txt}>
+            {t("logout")}
+          </div>
         </Link>
       </div>
     </div>
