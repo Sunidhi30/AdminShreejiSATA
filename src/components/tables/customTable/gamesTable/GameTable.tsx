@@ -39,7 +39,7 @@ const handleSubmit = async (e: React.FormEvent) => {
   e.preventDefault();
   try {
     const adminToken = localStorage.getItem("adminToken"); // get token from localStorage
-    const response = await fetch('http://localhost:9000/api/admin/games', {
+    const response = await fetch('https://satashreejibackend.onrender.com/api/admin/games', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -62,7 +62,7 @@ const handleSubmit = async (e: React.FormEvent) => {
   // const handleSubmit = async (e: React.FormEvent) => {
   //   e.preventDefault();
   //   try {
-  //     const response = await fetch('http://localhost:9000/api/admin/games', {
+  //     const response = await fetch('https://satashreejibackend.onrender.com/api/admin/games', {
   //       method: 'POST',
   //       headers: {
   //         'Content-Type': 'application/json'

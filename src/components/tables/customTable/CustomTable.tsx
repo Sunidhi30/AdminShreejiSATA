@@ -95,7 +95,7 @@ const CustomTable: React.FC<Props> = (props) => {
           return;
         }
 
-        const response = await fetch("http://localhost:9000/api/admin/users", {
+        const response = await fetch("https://satashreejibackend.onrender.com/api/admin/users", {
           headers: {
             Authorization: `Bearer ${token}`,
           },

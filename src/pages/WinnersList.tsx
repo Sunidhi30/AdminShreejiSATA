@@ -79,7 +79,7 @@ const WinnersList: React.FC = () => {
   const fetchGames = async () => {
     try {
       setGameLoading(true);
-      const response = await fetch('http://localhost:9000/api/admin/games', {
+      const response = await fetch('https://satashreejibackend.onrender.com/api/admin/games', {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${adminToken}`,
@@ -99,31 +99,32 @@ const WinnersList: React.FC = () => {
     }
   };
 
-  const fetchWinners = async (gameId: string) => {
-    try {
-      setLoading(true);
-      const response = await fetch(
-        `http://localhost:9000/api/admin/games/${gameId}/winners`,
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${adminToken}`,
-          },
-        }
-      );
-      const data: WinnersResponse = await response.json();
-      if (data.success) {
-        setWinners(data.data.winners);
-        setTotalWinners(data.data.summary.totalWinners);
+ const fetchWinners = React.useCallback(async (gameId: string) => {
+  try {
+    setLoading(true);
+    const response = await fetch(
+      `https://satashreejibackend.onrender.com/api/admin/games/${gameId}/winners`,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${adminToken}`,
+        },
       }
-    } catch (error) {
-      console.error('Error fetching winners:', error);
-      setWinners([]);
-      setTotalWinners(0);
-    } finally {
-      setLoading(false);
+    );
+    const data: WinnersResponse = await response.json();
+    if (data.success) {
+      setWinners(data.data.winners);
+      setTotalWinners(data.data.summary.totalWinners);
     }
-  };
+  } catch (error) {
+    console.error('Error fetching winners:', error);
+    setWinners([]);
+    setTotalWinners(0);
+  } finally {
+    setLoading(false);
+  }
+}, [adminToken]);
+
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-US', {
@@ -139,11 +140,37 @@ const WinnersList: React.FC = () => {
     fetchGames();
   }, []);
 
-  useEffect(() => {
-    if (selectedGame) {
-      fetchWinners(selectedGame._id);
-    }
-  }, [selectedGame]);
+useEffect(() => {
+  if (selectedGame) {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch(
+          `https://satashreejibackend.onrender.com/api/admin/games/${selectedGame._id}/winners`,
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${adminToken}`,
+            },
+          }
+        );
+        const data: WinnersResponse = await response.json();
+        if (data.success) {
+          setWinners(data.data.winners);
+          setTotalWinners(data.data.summary.totalWinners);
+        }
+      } catch (error) {
+        console.error('Error fetching winners:', error);
+        setWinners([]);
+        setTotalWinners(0);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }
+}, [selectedGame, adminToken]);
 
   if (gameLoading) {
     return (

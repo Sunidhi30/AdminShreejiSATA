@@ -23,7 +23,7 @@ const Products: React.FC = () => {
     const fetchGames = async () => {
       try {
         const token = localStorage.getItem("adminToken");
-        const response = await fetch("http://localhost:9000/api/admin/games", {
+        const response = await fetch("https://satashreejibackend.onrender.com/api/admin/games", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",

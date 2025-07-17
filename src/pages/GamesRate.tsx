@@ -53,7 +53,7 @@ const GamesRate: React.FC = () => {
   const fetchGames = async () => {
     try {
       const token = localStorage.getItem("adminToken");
-      const response = await fetch("http://localhost:9000/api/admin/games", {
+      const response = await fetch("https://satashreejibackend.onrender.com/api/admin/games", {
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -71,7 +71,7 @@ const GamesRate: React.FC = () => {
     try {
       setLoading(true);
       const token = localStorage.getItem("adminToken");
-      const response = await fetch(`http://localhost:9000/api/admin/games/${gameId}/rates`, {
+      const response = await fetch(`https://satashreejibackend.onrender.com/api/admin/games/${gameId}/rates`, {
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -96,7 +96,7 @@ const GamesRate: React.FC = () => {
 
     try {
       const token = localStorage.getItem("adminToken");
-      const response = await fetch(`http://localhost:9000/api/admin/games/${selectedGame}/rates`, {
+      const response = await fetch(`https://satashreejibackend.onrender.com/api/admin/games/${selectedGame}/rates`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

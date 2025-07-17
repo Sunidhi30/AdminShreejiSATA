@@ -52,7 +52,7 @@ const InvestorList: React.FC = () => {
   const fetchGames = async () => {
     try {
       setGameLoading(true);
-      const response = await fetch('http://localhost:9000/api/admin/games', {
+      const response = await fetch('https://satashreejibackend.onrender.com/api/admin/games', {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${adminToken}`,
@@ -76,7 +76,7 @@ const InvestorList: React.FC = () => {
     try {
       setLoading(true);
       const response = await fetch(
-        `http://localhost:9000/api/admin/games/${gameId}/investors?sort=${sort}`,
+        `https://satashreejibackend.onrender.com/api/admin/games/${gameId}/investors?sort=${sort}`,
         {
           headers: {
             'Content-Type': 'application/json',

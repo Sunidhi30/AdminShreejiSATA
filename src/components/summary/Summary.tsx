@@ -35,7 +35,7 @@ function Summary() {
   useEffect(() => {
     const fetchUserCount = async () => {
       try {
-        const response = await fetch("http://localhost:9000/api/admin/users-count");
+        const response = await fetch("https://satashreejibackend.onrender.com/api/admin/users-count");
         const data = await response.json();
         setUserCount(data.count);
       } catch (error) {
@@ -45,7 +45,7 @@ function Summary() {
 
     const fetchTotalBidAmount = async () => {
       try {
-        const response = await fetch("http://localhost:9000/api/admin/total-bid-amount");
+        const response = await fetch("https://satashreejibackend.onrender.com/api/admin/total-bid-amount");
         const data = await response.json();
         setTotalBidAmount(data.totalBidAmount);
       } catch (error) {
@@ -55,7 +55,7 @@ function Summary() {
 
     const fetchAdminEarnings = async () => {
       try {
-        const response = await fetch("http://localhost:9000/api/admin/admin-earnings");
+        const response = await fetch("https://satashreejibackend.onrender.com/api/admin/admin-earnings");
         const data = await response.json();
         setAdminEarnings(data.adminEarnings);
       } catch (error) {
