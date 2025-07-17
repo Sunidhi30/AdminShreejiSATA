@@ -1,0 +1,1109 @@
+// @use "../scss/abstracts" as *;
+
+// .winners-list {
+//   padding: 1.5rem;
+//   background: var(--bgc);
+//   border-radius: $largeBorderRadius;
+//   box-shadow: $mainBoxShadow;
+//   min-height: 600px;
+
+//   &__header {
+//     display: flex;
+//     justify-content: space-between;
+//     align-items: center;
+//     margin-bottom: 2rem;
+//     padding: 0.5rem 0;
+
+//     .header-left {
+//       h2 {
+//         font-size: 1.5rem;
+//         font-weight: 600;
+//         color: var(--primary-textColor);
+//         margin-bottom: 0.25rem;
+//       }
+
+//       p {
+//         color: var(--secondary-textColor);
+//         font-size: 0.875rem;
+//       }
+//     }
+
+//     .header-actions {
+//       display: flex;
+//       align-items: center;
+//       gap: 1rem;
+
+//       .game-selector {
+//         position: relative;
+
+//         .game-dropdown-btn {
+//           display: flex;
+//           align-items: center;
+//           gap: 0.75rem;
+//           padding: 0.75rem 1rem;
+//           background: var(--primaryColor);
+//           color: white;
+//           border: none;
+//           border-radius: 8px;
+//           cursor: pointer;
+//           transition: all 0.3s ease;
+//           font-weight: 500;
+//           min-width: 200px;
+//           justify-content: space-between;
+
+//           &:hover {
+//             opacity: 0.9;
+//             transform: translateY(-2px);
+//             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+//           }
+
+//           .selected-game {
+//             white-space: nowrap;
+//             overflow: hidden;
+//             text-overflow: ellipsis;
+//           }
+
+//           .dropdown-icon {
+//             transition: transform 0.3s ease;
+//             flex-shrink: 0;
+
+//             &.open {
+//               transform: rotate(180deg);
+//             }
+//           }
+//         }
+
+//         .game-dropdown {
+//           position: absolute;
+//           top: 100%;
+//           left: 0;
+//           right: 0;
+//           background: var(--card-bgc);
+//           border: 1px solid var(--borderColor);
+//           border-radius: 8px;
+//           box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+//           z-index: 1000;
+//           max-height: 300px;
+//           overflow-y: auto;
+//           margin-top: 0.5rem;
+
+//           .game-option {
+//             display: flex;
+//             align-items: center;
+//             justify-content: space-between;
+//             padding: 0.75rem 1rem;
+//             border: none;
+//             background: none;
+//             cursor: pointer;
+//             transition: all 0.3s ease;
+//             width: 100%;
+//             text-align: left;
+//             border-bottom: 1px solid var(--borderColor);
+
+//             &:last-child {
+//               border-bottom: none;
+//             }
+
+//             &:hover {
+//               background: var(--hover-color);
+//             }
+
+//             &.selected {
+//               background: rgba(var(--primaryColor-rgb), 0.1);
+//               color: var(--primaryColor);
+//             }
+
+//             .game-option-info {
+//               display: flex;
+//               flex-direction: column;
+//               gap: 0.25rem;
+
+//               .game-name {
+//                 font-weight: 500;
+//                 color: var(--primary-textColor);
+//               }
+
+//               .game-timing {
+//                 font-size: 0.75rem;
+//                 color: var(--secondary-textColor);
+//               }
+//             }
+
+//             .game-status {
+//               font-size: 0.75rem;
+//               padding: 0.25rem 0.5rem;
+//               border-radius: 4px;
+//               font-weight: 500;
+//               text-transform: capitalize;
+
+//               &.active {
+//                 background: rgba(var(--approved-color-rgb), 0.1);
+//                 color: var(--approved-textColor);
+//               }
+
+//               &.inactive {
+//                 background: rgba(var(--rejected-color-rgb), 0.1);
+//                 color: var(--rejected-textColor);
+//               }
+//             }
+//           }
+//         }
+//       }
+//     }
+//   }
+
+//   .game-info-card {
+//     display: flex;
+//     align-items: center;
+//     gap: 1rem;
+//     padding: 1rem;
+//     background: var(--card-bgc);
+//     border-radius: $smallBorderRadius;
+//     margin-bottom: 1.5rem;
+//     border: 1px solid var(--borderColor);
+
+//     .game-avatar {
+//       width: 50px;
+//       height: 50px;
+//       background: var(--primaryColor);
+//       color: white;
+//       border-radius: 50%;
+//       display: flex;
+//       align-items: center;
+//       justify-content: center;
+//       font-weight: 700;
+//       font-size: 1.25rem;
+//       flex-shrink: 0;
+//     }
+
+//     .game-details {
+//       flex: 1;
+
+//       h3 {
+//         font-size: 1.125rem;
+//         font-weight: 600;
+//         color: var(--primary-textColor);
+//         margin-bottom: 0.5rem;
+//       }
+
+//       .game-meta {
+//         display: flex;
+//         align-items: center;
+//         gap: 1rem;
+
+//         .game-timing {
+//           display: flex;
+//           align-items: center;
+//           gap: 0.5rem;
+//           color: var(--secondary-textColor);
+//           font-size: 0.875rem;
+//         }
+
+//         .game-status {
+//           font-size: 0.75rem;
+//           padding: 0.25rem 0.5rem;
+//           border-radius: 4px;
+//           font-weight: 500;
+//           text-transform: capitalize;
+
+//           &.active {
+//             background: rgba(var(--approved-color-rgb), 0.1);
+//             color: var(--approved-textColor);
+//           }
+
+//           &.inactive {
+//             background: rgba(var(--rejected-color-rgb), 0.1);
+//             color: var(--rejected-textColor);
+//           }
+//         }
+//       }
+//     }
+
+//     .total-winners {
+//       display: flex;
+//       align-items: center;
+//       gap: 0.5rem;
+//       color: var(--approved-textColor);
+//       font-weight: 600;
+//       flex-shrink: 0;
+//       background: rgba(var(--approved-color-rgb), 0.1);
+//       padding: 0.5rem 1rem;
+//       border-radius: 8px;
+
+//       svg {
+//         color: var(--approved-textColor);
+//       }
+//     }
+//   }
+
+//   &__wrapper {
+//     overflow-x: auto;
+
+//     table {
+//       width: 100%;
+//       border-spacing: 0;
+//       border-collapse: collapse;
+
+//       th {
+//         background: var(--primaryColor);
+//         color: var(--card-bgc);
+//         font-weight: 600;
+//         text-align: left;
+//         padding: 1rem;
+//         white-space: nowrap;
+
+//         &:first-child { border-top-left-radius: $smallBorderRadius; }
+//         &:last-child { border-top-right-radius: $smallBorderRadius; }
+//       }
+
+//       td {
+//         padding: 1rem;
+//         background: var(--card-bgc);
+//         border-bottom: 1px solid var(--borderColor);
+//         vertical-align: top;
+//       }
+
+//       tr:hover td {
+//         background: var(--hover-color);
+//       }
+//     }
+//   }
+
+//   .winner-info {
+//     display: flex;
+//     align-items: center;
+//     gap: 0.75rem;
+
+//     .winner-avatar {
+//       width: 40px;
+//       height: 40px;
+//       border-radius: 50%;
+//       overflow: hidden;
+//       background: rgba(var(--approved-color-rgb), 0.1);
+//       display: flex;
+//       align-items: center;
+//       justify-content: center;
+//       color: var(--approved-textColor);
+//       flex-shrink: 0;
+//     }
+
+//     .winner-details {
+//       .winner-name {
+//         font-weight: 500;
+//         color: var(--primary-textColor);
+//         margin-bottom: 0.25rem;
+//       }
+
+//       .winner-id {
+//         color: var(--secondary-textColor);
+//         font-size: 0.75rem;
+//         font-family: monospace;
+//       }
+//     }
+//   }
+
+//   .contact-info {
+//     .email {
+//       display: flex;
+//       align-items: center;
+//       gap: 0.5rem;
+//       color: var(--secondary-textColor);
+//       font-size: 0.875rem;
+//     }
+//   }
+
+//   .bet-details {
+//     display: flex;
+//     flex-direction: column;
+//     gap: 0.5rem;
+
+//     .bet-number {
+//       display: flex;
+//       align-items: center;
+//       gap: 0.5rem;
+//       color: var(--primary-textColor);
+//       font-weight: 500;
+//     }
+
+//     .bet-type {
+//       padding: 0.25rem 0.5rem;
+//       border-radius: 4px;
+//       font-size: 0.75rem;
+//       font-weight: 500;
+//       text-transform: capitalize;
+//       display: inline-block;
+//       width: fit-content;
+
+//       &.single {
+//         background: rgba(var(--approved-color-rgb), 0.1);
+//         color: var(--approved-textColor);
+//       }
+
+//       &.jodi {
+//         background: rgba(var(--warning-color-rgb), 0.1);
+//         color: var(--warning-textColor);
+//       }
+//     }
+//   }
+
+//   .amount-info {
+//     display: flex;
+//     align-items: center;
+//     gap: 0.5rem;
+//     color: var(--primary-textColor);
+//     font-weight: 600;
+//     font-size: 1rem;
+
+//     &.winning {
+//       color: var(--approved-textColor);
+//       background: rgba(var(--approved-color-rgb), 0.1);
+//       padding: 0.5rem;
+//       border-radius: 6px;
+      
+//       svg {
+//         color: var(--approved-textColor);
+//       }
+//     }
+//   }
+
+//   .result-number {
+//     font-size: 1.25rem;
+//     font-weight: 700;
+//     color: var(--primaryColor);
+//     background: rgba(var(--primaryColor-rgb), 0.1);
+//     padding: 0.5rem 1rem;
+//     border-radius: 6px;
+//     display: inline-block;
+//   }
+
+//   .date-info {
+//     display: flex;
+//     align-items: center;
+//     gap: 0.5rem;
+//     color: var(--secondary-textColor);
+//     font-size: 0.875rem;
+//   }
+
+//   .loading-state {
+//     display: flex;
+//     flex-direction: column;
+//     align-items: center;
+//     justify-content: center;
+//     padding: 3rem;
+//     color: var(--secondary-textColor);
+
+//     .spinner {
+//       width: 40px;
+//       height: 40px;
+//       border: 4px solid var(--borderColor);
+//       border-top: 4px solid var(--primaryColor);
+//       border-radius: 50%;
+//       animation: spin 1s linear infinite;
+//       margin-bottom: 1rem;
+//     }
+
+//     p {
+//       font-size: 1rem;
+//       font-weight: 500;
+//     }
+//   }
+
+//   .empty-state {
+//     display: flex;
+//     flex-direction: column;
+//     align-items: center;
+//     justify-content: center;
+//     padding: 3rem;
+//     color: var(--secondary-textColor);
+//     text-align: center;
+
+//     svg {
+//       margin-bottom: 1rem;
+//       color: var(--approved-textColor);
+//       opacity: 0.5;
+//     }
+
+//     h3 {
+//       font-size: 1.25rem;
+//       font-weight: 600;
+//       color: var(--primary-textColor);
+//       margin-bottom: 0.5rem;
+//     }
+
+//     p {
+//       font-size: 0.875rem;
+//       max-width: 400px;
+//       line-height: 1.5;
+//     }
+//   }
+// }
+
+// @keyframes spin {
+//   0% { transform: rotate(0deg); }
+//   100% { transform: rotate(360deg); }
+// }
+
+// // Dark mode adjustments
+// @media (prefers-color-scheme: dark) {
+//   .winners-list {
+//     .game-dropdown {
+//       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+//     }
+//   }
+// }
+
+// // Responsive styles
+// @media (max-width: 768px) {
+//   .winners-list {
+//     padding: 1rem;
+
+//     &__header {
+//       flex-direction: column;
+//       gap: 1rem;
+//       align-items: stretch;
+
+//       .header-actions {
+//         flex-direction: column;
+//         gap: 1rem;
+
+//         .game-selector {
+//           .game-dropdown-btn {
+//             width: 100%;
+//             justify-content: space-between;
+//           }
+//         }
+//       }
+//     }
+
+//     .game-info-card {
+//       flex-direction: column;
+//       text-align: center;
+//       gap: 1rem;
+
+//       .game-details {
+//         order: 2;
+//       }
+
+//       .total-winners {
+//         order: 3;
+//         justify-content: center;
+//       }
+//     }
+
+//     &__wrapper {
+//       table {
+//         th, td {
+//           padding: 0.75rem 0.5rem;
+//           font-size: 0.875rem;
+//         }
+//       }
+//     }
+
+//     .winner-info {
+//       flex-direction: column;
+//       text-align: center;
+//       gap: 0.5rem;
+
+//       .winner-avatar {
+//         width: 32px;
+//         height: 32px;
+//         margin: 0 auto;
+//       }
+//     }
+
+//     .bet-details {
+//       align-items: center;
+//       text-align: center;
+//     }
+
+//     .contact-info .email {
+//       flex-direction: column;
+//       gap: 0.25rem;
+//       text-align: center;
+//     }
+//   }
+// }
+
+// @media (max-width: 480px) {
+//   .winners-list {
+//     padding: 0.75rem;
+
+//     &__wrapper {
+//       table {
+//         th, td {
+//           padding: 0.5rem 0.25rem;
+//           font-size: 0.75rem;
+//         }
+//       }
+//     }
+
+//     .game-info-card {
+//       padding: 0.75rem;
+
+//       .game-avatar {
+//         width: 40px;
+//         height: 40px;
+//         font-size: 1rem;
+//       }
+//     }
+
+//     .result-number {
+//       font-size: 1rem;
+//       padding: 0.25rem 0.5rem;
+//     }
+//   }
+// }
+
+@use "../scss/abstracts" as *;
+
+.winners-list {
+  padding: 1.5rem;
+  background: var(--bgc);
+  border-radius: $largeBorderRadius;
+  box-shadow: $mainBoxShadow;
+  min-height: 600px;
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding: 0.5rem 0;
+
+    .header-left {
+      h2 {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: var(--primary-textColor);
+        margin-bottom: 0.25rem;
+      }
+
+      p {
+        color: var(--secondary-textColor);
+        font-size: 0.875rem;
+      }
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+
+      .game-selector {
+        position: relative;
+
+        .game-dropdown-btn {
+          display: flex;
+          align-items: center;
+          gap: 0.75rem;
+          padding: 0.75rem 1rem;
+          background: var(--primaryColor);
+          color: white;
+          border: none;
+          border-radius: 8px;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          font-weight: 500;
+          min-width: 200px;
+          justify-content: space-between;
+
+          &:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+          }
+
+          .selected-game {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+          }
+
+          .dropdown-icon {
+            transition: transform 0.3s ease;
+            flex-shrink: 0;
+
+            &.open {
+              transform: rotate(180deg);
+            }
+          }
+        }
+
+        .game-dropdown {
+          position: absolute;
+          top: 100%;
+          left: 0;
+          right: 0;
+          background: var(--card-bgc);
+          border: 1px solid var(--borderColor);
+          border-radius: 8px;
+          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+          z-index: 1000;
+          max-height: 300px;
+          overflow-y: auto;
+          margin-top: 0.5rem;
+
+          .game-option {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.75rem 1rem;
+            border: none;
+            background: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            text-align: left;
+            border-bottom: 1px solid var(--borderColor);
+
+            &:last-child {
+              border-bottom: none;
+            }
+
+            &:hover {
+              background: var(--hover-color);
+            }
+
+            &.selected {
+              background: rgba(var(--primaryColor-rgb), 0.1);
+              color: var(--primaryColor);
+            }
+
+            .game-option-info {
+              display: flex;
+              flex-direction: column;
+              gap: 0.25rem;
+
+              .game-name {
+                font-weight: 500;
+                color: var(--primary-textColor);
+              }
+
+              .game-timing {
+                font-size: 0.75rem;
+                color: var(--secondary-textColor);
+              }
+            }
+
+            .game-status {
+              font-size: 0.75rem;
+              padding: 0.25rem 0.5rem;
+              border-radius: 4px;
+              font-weight: 500;
+              text-transform: capitalize;
+
+              &.active {
+                background: rgba(var(--approved-color-rgb), 0.1);
+                color: var(--approved-textColor);
+              }
+
+              &.inactive {
+                background: rgba(var(--rejected-color-rgb), 0.1);
+                color: var(--rejected-textColor);
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .game-info-card {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    background: var(--card-bgc);
+    border-radius: $smallBorderRadius;
+    margin-bottom: 1.5rem;
+    border: 1px solid var(--borderColor);
+
+    .game-avatar {
+      width: 50px;
+      height: 50px;
+      background: var(--primaryColor);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 1.25rem;
+      flex-shrink: 0;
+    }
+
+    .game-details {
+      flex: 1;
+
+      h3 {
+        font-size: 1.125rem;
+        font-weight: 600;
+        color: var(--primary-textColor);
+        margin-bottom: 0.5rem;
+      }
+
+      .game-meta {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+
+        .game-timing {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          color: var(--secondary-textColor);
+          font-size: 0.875rem;
+        }
+
+        .game-status {
+          font-size: 0.75rem;
+          padding: 0.25rem 0.5rem;
+          border-radius: 4px;
+          font-weight: 500;
+          text-transform: capitalize;
+
+          &.active {
+            background: rgba(var(--approved-color-rgb), 0.1);
+            color: var(--approved-textColor);
+          }
+
+          &.inactive {
+            background: rgba(var(--rejected-color-rgb), 0.1);
+            color: var(--rejected-textColor);
+          }
+        }
+      }
+    }
+
+    .total-winners {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--approved-textColor);
+      font-weight: 600;
+      flex-shrink: 0;
+      background: rgba(var(--approved-color-rgb), 0.1);
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+
+      svg {
+        color: var(--approved-textColor);
+      }
+    }
+  }
+
+  &__wrapper {
+    overflow-x: auto;
+
+    table {
+      width: 100%;
+      border-spacing: 0;
+      border-collapse: collapse;
+
+      th {
+        background: var(--primaryColor);
+        color: var(--card-bgc);
+        font-weight: 600;
+        text-align: left;
+        padding: 1rem;
+        white-space: nowrap;
+
+        &:first-child { border-top-left-radius: $smallBorderRadius; }
+        &:last-child { border-top-right-radius: $smallBorderRadius; }
+      }
+
+      td {
+        padding: 1rem;
+        background: var(--card-bgc);
+        border-bottom: 1px solid var(--borderColor);
+        vertical-align: top;
+      }
+
+      tr:hover td {
+        background: var(--hover-color);
+      }
+    }
+  }
+
+  .winner-info {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+
+    .winner-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      overflow: hidden;
+      background: rgba(var(--approved-color-rgb), 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--approved-textColor);
+      flex-shrink: 0;
+    }
+
+    .winner-details {
+      .winner-name {
+        font-weight: 500;
+        color: var(--primary-textColor);
+        margin-bottom: 0.25rem;
+      }
+
+      .winner-id {
+        color: var(--secondary-textColor);
+        font-size: 0.75rem;
+        font-family: monospace;
+      }
+    }
+  }
+
+  .contact-info {
+    .email {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--secondary-textColor);
+      font-size: 0.875rem;
+    }
+  }
+
+  .bet-details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+
+    .bet-number {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--primary-textColor);
+      font-weight: 500;
+    }
+
+    .bet-type {
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      text-transform: capitalize;
+      display: inline-block;
+      width: fit-content;
+
+      &.single {
+        background: rgba(var(--approved-color-rgb), 0.1);
+        color: var(--approved-textColor);
+      }
+
+      &.jodi {
+        background: rgba(var(--warning-color-rgb), 0.1);
+        color: var(--warning-textColor);
+      }
+    }
+  }
+
+  .amount-info {
+    &.winning {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--approved-textColor);
+      font-weight: 600;
+      font-size: 1rem;
+      background: rgba(var(--approved-color-rgb), 0.1);
+      padding: 0.5rem;
+      border-radius: 6px;
+      
+      svg {
+        color: var(--approved-textColor);
+      }
+    }
+  }
+
+  .result-number {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--primaryColor);
+    background: rgba(var(--primaryColor-rgb), 0.1);
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    display: inline-block;
+  }
+
+  .date-info {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--secondary-textColor);
+    font-size: 0.875rem;
+  }
+
+  .loading-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem;
+    color: var(--secondary-textColor);
+
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 4px solid var(--borderColor);
+      border-top: 4px solid var(--primaryColor);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-bottom: 1rem;
+    }
+
+    p {
+      font-size: 1rem;
+      font-weight: 500;
+    }
+  }
+
+  .empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem;
+    color: var(--secondary-textColor);
+    text-align: center;
+
+    svg {
+      margin-bottom: 1rem;
+      color: var(--approved-textColor);
+      opacity: 0.5;
+    }
+
+    h3 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--primary-textColor);
+      margin-bottom: 0.5rem;
+    }
+
+    p {
+      font-size: 0.875rem;
+      max-width: 400px;
+      line-height: 1.5;
+    }
+  }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+// Dark mode adjustments
+@media (prefers-color-scheme: dark) {
+  .winners-list {
+    .game-dropdown {
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    }
+  }
+}
+
+// Responsive styles
+@media (max-width: 768px) {
+  .winners-list {
+    padding: 1rem;
+
+    &__header {
+      flex-direction: column;
+      gap: 1rem;
+      align-items: stretch;
+
+      .header-actions {
+        flex-direction: column;
+        gap: 1rem;
+
+        .game-selector {
+          .game-dropdown-btn {
+            width: 100%;
+            justify-content: space-between;
+          }
+        }
+      }
+    }
+
+    .game-info-card {
+      flex-direction: column;
+      text-align: center;
+      gap: 1rem;
+
+      .game-details {
+        order: 2;
+      }
+
+      .total-winners {
+        order: 3;
+        justify-content: center;
+      }
+    }
+
+    &__wrapper {
+      table {
+        th, td {
+          padding: 0.75rem 0.5rem;
+          font-size: 0.875rem;
+        }
+      }
+    }
+
+    .winner-info {
+      flex-direction: column;
+      text-align: center;
+      gap: 0.5rem;
+
+      .winner-avatar {
+        width: 32px;
+        height: 32px;
+        margin: 0 auto;
+      }
+    }
+
+    .bet-details {
+      align-items: center;
+      text-align: center;
+    }
+
+    .contact-info .email {
+      flex-direction: column;
+      gap: 0.25rem;
+      text-align: center;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .winners-list {
+    padding: 0.75rem;
+
+    &__wrapper {
+      table {
+        th, td {
+          padding: 0.5rem 0.25rem;
+          font-size: 0.75rem;
+        }
+      }
+    }
+
+    .game-info-card {
+      padding: 0.75rem;
+
+      .game-avatar {
+        width: 40px;
+        height: 40px;
+        font-size: 1rem;
+      }
+    }
+
+    .result-number {
+      font-size: 1rem;
+      padding: 0.25rem 0.5rem;
+    }
+  }
+}

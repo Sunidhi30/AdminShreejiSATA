@@ -16,6 +16,10 @@ const BlankPage = React.lazy(() => import("./pages/BlankPage"));
 const Login = React.lazy(() => import("./pages/Login"));
 const GamesRate = React.lazy(() => import("./pages/GamesRate")); // Import the new GamesRate page
 const GameResult = React.lazy(() => import("./pages/GameResult")); // Import the new GameResult page
+const GamesListWithInvestors =React.lazy(() => import("./pages/InvestorsList")); // Import the new GameResult page
+const InvestorList = React.lazy(() => import("./pages/InvestorsList")); // Import the new GameResult page
+const WiinningDetails = React.lazy(() => import("./pages/WinnersList")); // Import the new GameResult page
+
 function App() {
   return (
     <BrowserRouter>
@@ -30,7 +34,10 @@ function App() {
               <Route path="/products/:productId" element={<ProductEdit />} />
                 <Route path="/games-rate" element={<GamesRate />} /> {/* Add this new route */}
                           <Route path="/game-results" element={<GameResult />} />
-
+<Route path="/investors-list" element={<GamesListWithInvestors />} />
+             <Route path="/admin/investors" element={<InvestorList />} />
+<Route path="/Winning-details" element={<WiinningDetails />} />
+        
               <Route path="/orders" element={<BlankPage />} />
               <Route path="/analytics" element={<BlankPage />} />
               <Route path="/discount" element={<BlankPage />} />

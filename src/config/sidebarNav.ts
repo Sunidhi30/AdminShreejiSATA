@@ -39,18 +39,18 @@ const sidebarNav = [
     icon: "mdi:file-chart-outline",
     text: "Reports",
     children: [
-      {
+     
+       {
         section: "Winner Prediction",
-        link: "/products", 
+        link: "/investors-list", 
       },
-      
 {
     section: "Profit/Loss",
     link: "/games-rate", 
 },
        {
-        section: "Winning details",
-        link: "/game-results", 
+        section: "Winning Details",
+        link: "/Winning-details", 
       },
        {
         section: "Bet Filter",
