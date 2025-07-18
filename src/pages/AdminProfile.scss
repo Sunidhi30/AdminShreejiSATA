@@ -1,0 +1,645 @@
+// Variables
+$primary-red: #dc2626;
+$secondary-red: #ef4444;
+$light-red: #fee2e2;
+$dark-red: #991b1b;
+$white: #ffffff;
+$gray-50: #f9fafb;
+$gray-100: #f3f4f6;
+$gray-200: #e5e7eb;
+$gray-300: #d1d5db;
+$gray-400: #9ca3af;
+$gray-500: #6b7280;
+$gray-600: #4b5563;
+$gray-700: #374151;
+$gray-800: #1f2937;
+$gray-900: #111827;
+$success-green: #10b981;
+$error-red: #ef4444;
+
+// Mixins
+@mixin card-shadow {
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+@mixin hover-lift {
+  transition: all 0.3s ease;
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.15);
+  }
+}
+
+@mixin button-base {
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+// Main Container
+.profile-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px;
+  background: linear-gradient(135deg, $gray-50 0%, $light-red 100%);
+  min-height: 100vh;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+// Profile Header
+.profile-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 32px;
+  padding: 0 8px;
+
+  h1 {
+    font-size: 32px;
+    font-weight: 700;
+    color: $gray-900;
+    margin: 0;
+    background: linear-gradient(135deg, $primary-red, $secondary-red);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .profile-actions {
+    display: flex;
+    gap: 12px;
+  }
+}
+
+// Buttons
+.btn {
+  @include button-base;
+
+  &.btn-primary {
+    background: linear-gradient(135deg, $primary-red, $secondary-red);
+    color: $white;
+    
+    &:hover {
+      background: linear-gradient(135deg, $dark-red, $primary-red);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba($primary-red, 0.3);
+    }
+  }
+
+  &.btn-secondary {
+    background: $white;
+    color: $gray-700;
+    border: 2px solid $gray-200;
+    
+    &:hover {
+      background: $gray-50;
+      border-color: $primary-red;
+      color: $primary-red;
+      transform: translateY(-2px);
+    }
+  }
+}
+
+// Messages
+.message {
+  padding: 16px 20px;
+  border-radius: 12px;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: 500;
+  animation: slideDown 0.3s ease;
+
+  i {
+    font-size: 18px;
+  }
+
+  &.success-message {
+    background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+    color: #065f46;
+    border: 1px solid #10b981;
+  }
+
+  &.error-message {
+    background: linear-gradient(135deg, #fef2f2, #fecaca);
+    color: #7f1d1d;
+    border: 1px solid $error-red;
+  }
+}
+
+// Profile Content
+.profile-content {
+  display: grid;
+  grid-template-columns: 1fr 400px;
+  gap: 32px;
+  
+  @media (max-width: 1024px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+// Profile Card
+.profile-card {
+  background: $white;
+  border-radius: 20px;
+  @include card-shadow;
+  @include hover-lift;
+  overflow: hidden;
+  border: 1px solid $gray-100;
+}
+
+.profile-image-section {
+  background: linear-gradient(135deg, $primary-red, $secondary-red);
+  padding: 40px 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="50" cy="50" r="1" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+  }
+}
+
+.profile-image-container {
+  position: relative;
+  z-index: 1;
+}
+
+.profile-image {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  border: 4px solid $white;
+  object-fit: cover;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+.image-upload-overlay {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  
+  .image-upload-input {
+    display: none;
+  }
+  
+  .image-upload-label {
+    width: 40px;
+    height: 40px;
+    background: $white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transition: all 0.3s ease;
+    
+    &:hover {
+      transform: scale(1.1);
+      background: $light-red;
+    }
+    
+    i {
+      color: $primary-red;
+      font-size: 16px;
+    }
+  }
+}
+
+.profile-status {
+  margin-top: 16px;
+  z-index: 1;
+  position: relative;
+}
+
+.status-badge {
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  
+  &.active {
+    background: rgba(255, 255, 255, 0.2);
+    color: $white;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+  }
+  
+  &.inactive {
+    background: rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+}
+
+.profile-details {
+  padding: 32px;
+}
+
+// Profile Info
+.profile-info {
+  .info-item {
+    margin-bottom: 24px;
+    
+    &:last-child {
+      margin-bottom: 0;
+    }
+    
+    label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      color: $gray-500;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
+    }
+    
+    p {
+      font-size: 16px;
+      color: $gray-800;
+      margin: 0;
+      font-weight: 500;
+    }
+  }
+}
+
+// Profile Form
+.profile-form {
+  .form-group {
+    margin-bottom: 24px;
+    
+    label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      color: $gray-700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+    }
+    
+    input[type="text"],
+    input[type="email"],
+    input[type="password"] {
+      width: 100%;
+      padding: 12px 16px;
+      border: 2px solid $gray-200;
+      border-radius: 8px;
+      font-size: 14px;
+      transition: all 0.3s ease;
+      background: $white;
+      
+      &:focus {
+        outline: none;
+        border-color: $primary-red;
+        box-shadow: 0 0 0 3px rgba($primary-red, 0.1);
+      }
+    }
+    
+    &.checkbox-group {
+      .checkbox-label {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        cursor: pointer;
+        font-size: 14px;
+        color: $gray-700;
+        text-transform: none;
+        letter-spacing: normal;
+        
+        input[type="checkbox"] {
+          display: none;
+        }
+        
+        .checkbox-custom {
+          width: 20px;
+          height: 20px;
+          border: 2px solid $gray-300;
+          border-radius: 4px;
+          position: relative;
+          transition: all 0.3s ease;
+          
+          &::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 6px;
+            width: 4px;
+            height: 8px;
+            border: solid $white;
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+          }
+        }
+        
+        input[type="checkbox"]:checked + .checkbox-custom {
+          background: $primary-red;
+          border-color: $primary-red;
+          
+          &::after {
+            opacity: 1;
+          }
+        }
+      }
+    }
+  }
+  
+  .form-actions {
+    padding-top: 16px;
+  }
+}
+
+// Earnings Card
+.earnings-card {
+  background: $white;
+  border-radius: 20px;
+  @include card-shadow;
+  @include hover-lift;
+  overflow: hidden;
+  border: 1px solid $gray-100;
+  height: fit-content;
+}
+
+.earnings-header {
+  background: linear-gradient(135deg, $gray-800, $gray-900);
+  color: $white;
+  padding: 24px 32px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  
+  h3 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 600;
+  }
+  
+  i {
+    font-size: 24px;
+    opacity: 0.7;
+  }
+}
+
+.earnings-content {
+  padding: 32px;
+  
+  .earning-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 28px;
+    
+    &:last-child {
+      margin-bottom: 0;
+    }
+    
+    .earning-icon {
+      width: 50px;
+      height: 50px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, $light-red, rgba($primary-red, 0.1));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      
+      i {
+        font-size: 20px;
+        color: $primary-red;
+      }
+    }
+    
+    .earning-details {
+      flex: 1;
+      
+      label {
+        display: block;
+        font-size: 12px;
+        font-weight: 600;
+        color: $gray-500;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 4px;
+      }
+      
+      .amount {
+        font-size: 24px;
+        font-weight: 700;
+        color: $gray-800;
+        margin: 0;
+        
+        &.primary {
+          color: $primary-red;
+        }
+      }
+    }
+  }
+}
+
+// Modal
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease;
+}
+
+.modal {
+  background: $white;
+  border-radius: 20px;
+  max-width: 500px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+  @include card-shadow;
+  animation: slideUp 0.3s ease;
+}
+
+.modal-header {
+  padding: 24px 32px;
+  border-bottom: 1px solid $gray-200;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  
+  h3 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 600;
+    color: $gray-900;
+  }
+  
+  .close-btn {
+    width: 32px;
+    height: 32px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    
+    &:hover {
+      background: $gray-100;
+    }
+    
+    i {
+      color: $gray-500;
+      font-size: 16px;
+    }
+  }
+}
+
+.password-form {
+  padding: 32px;
+  
+  .form-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+  }
+}
+
+// Loading Spinner
+.loading-spinner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 300px;
+  
+  .spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid $gray-200;
+    border-top: 4px solid $primary-red;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 16px;
+  }
+  
+  p {
+    color: $gray-600;
+    font-size: 14px;
+  }
+}
+
+// Animations
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(50px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes slideDown {
+  from { transform: translateY(-20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+// Responsive Design
+// Responsive Design
+@media (max-width: 768px) {
+  .profile-container {
+    padding: 16px;
+  }
+
+  .profile-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+
+    h1 {
+      font-size: 28px;
+      text-align: center;
+    }
+
+    .profile-actions {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+
+  .profile-content {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .profile-card,
+  .earnings-card {
+    border-radius: 16px;
+  }
+
+  .profile-image {
+    width: 100px;
+    height: 100px;
+    border-width: 3px;
+  }
+
+  .profile-form {
+    .form-group {
+      input[type="text"],
+      input[type="email"],
+      input[type="password"] {
+        font-size: 13px;
+        padding: 10px 14px;
+      }
+    }
+  }
+
+  .modal {
+    max-width: 90%;
+    border-radius: 16px;
+  }
+
+  .modal-header {
+    padding: 16px 20px;
+  }
+
+  .password-form {
+    padding: 20px;
+  }
+}

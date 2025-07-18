@@ -70,20 +70,33 @@ const sidebarNav = [
       },
     ],
   },
-  {
-    link: "/analytics",
+  
+   {
+    // Remove direct link here because it's a parent now
     section: "Wallet",
     icon: "carbon:analytics",
-    text: "Analytics",
+    text: "Wallet",
+    children: [
+      {
+        section: "Users Wtihdraw",
+        link: "/users-withdraw", 
+      },
+      
+{
+    section: "Users Deposit",
+    link: "/users-Deposit", 
+}, 
+    ],
   },
+  
   {
-    link: "/discount",
+    link: "/notices",
     section: "Notices",
     icon: "bi:chat-dots",
     text: "Discount",
   },
   {
-    link: "/inventory",
+    link: "/admin-profile",
     section: "Settings",
     icon: "mdi:cog-outline",
     text: "Inventory",

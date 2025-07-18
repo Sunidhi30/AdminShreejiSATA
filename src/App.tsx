@@ -4,8 +4,9 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import LoadingSpinner from "./components/UI/loadingSpinner/LoadingSpinner";
 import AuthLayout from "./layout/AuthLayout";
 import MainLayout from "./layout/MainLayout";
+import AdminNotices from "./pages/AdminNotices";
 import "./scss/App.scss";
-
+const AdminProfile =React.lazy(() => import("./pages/AdminProfile"));
 const Dashboard = React.lazy(() => import("./pages/Dashboard"));
 const Customers = React.lazy(() => import("./pages/Customers"));
 const CustomerEdit = React.lazy(() => import("./pages/CustomerEdit"));
@@ -19,7 +20,8 @@ const GameResult = React.lazy(() => import("./pages/GameResult")); // Import the
 const GamesListWithInvestors =React.lazy(() => import("./pages/InvestorsList")); // Import the new GameResult page
 const InvestorList = React.lazy(() => import("./pages/InvestorsList")); // Import the new GameResult page
 const WiinningDetails = React.lazy(() => import("./pages/WinnersList")); // Import the new GameResult page
-
+const UserWithdraw =React.lazy(() => import("./pages/WithdrawUsers")); // Import the new GameResult page
+const UserDeposit =React.lazy(() => import("./pages/UserDeposit")); // Import the new GameResult page
 function App() {
   return (
     <BrowserRouter>
@@ -37,6 +39,10 @@ function App() {
 <Route path="/investors-list" element={<GamesListWithInvestors />} />
              <Route path="/admin/investors" element={<InvestorList />} />
 <Route path="/Winning-details" element={<WiinningDetails />} />
+      <Route path="/users-withdraw" element={<UserWithdraw />} />
+      <Route path="/users-Deposit" element={<UserDeposit />} />
+            <Route path="/notices" element={<AdminNotices />} />
+            <Route path="/admin-profile" element={<AdminProfile />} />
         
               <Route path="/orders" element={<BlankPage />} />
               <Route path="/analytics" element={<BlankPage />} />
