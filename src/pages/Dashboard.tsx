@@ -1,7 +1,6 @@
-import React from "react";
 import { useTranslation } from "react-i18next";
-import Summary from "../components/summary/Summary";
 import SaleChart from "../components/chart/Chart";
+import Summary from "../components/summary/Summary";
 import DashboardTables from "../components/tables/DashboardTables";
 
 function Dashboard() {

@@ -33,7 +33,7 @@ const AdminNotices: React.FC = () => {
   const fetchNotices = async () => {
     try {
       const token = localStorage.getItem('adminToken');
-      const response = await fetch('http://localhost:9000/api/admin/notices', {
+      const response = await fetch('https://satashreejibackend.onrender.com/api/admin/notices', {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -60,7 +60,7 @@ const AdminNotices: React.FC = () => {
 
     try {
       const token = localStorage.getItem('adminToken');
-      const response = await fetch('http://localhost:9000/api/admin/notices', {
+      const response = await fetch('https://satashreejibackend.onrender.com/api/admin/notices', {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,

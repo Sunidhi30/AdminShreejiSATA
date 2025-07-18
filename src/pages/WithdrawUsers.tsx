@@ -59,8 +59,8 @@ const WithdrawUser: React.FC = () => {
     try {
       setLoading(true);
 
-    //   let url = 'http://localhost:9000/api/admin/users-withdrawals';
-    let url = 'http://localhost:9000/api/admin/users-withdrawals-testing';
+
+    let url = 'https://satashreejibackend.onrender.com/api/admin/users-withdrawals-testing';
 
       if (filterStatus) {
         url += `?status=${filterStatus}`; // 🔥 Apply filter
@@ -90,7 +90,7 @@ const WithdrawUser: React.FC = () => {
   const handleApprove = async (withdrawalId: string) => {
     try {
       setProcessingId(withdrawalId);
-      const response = await fetch(`http://localhost:9000/api/admin/users-withdrawalstesting/${withdrawalId}/approve`, {
+      const response = await fetch(`https://satashreejibackend.onrender.com/api/admin/users-withdrawalstesting/${withdrawalId}/approve`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('adminToken')}`,
@@ -121,7 +121,7 @@ const WithdrawUser: React.FC = () => {
 
     try {
       setProcessingId(selectedWithdrawal._id);
-      const response = await fetch(`http://localhost:9000/api/admin/users-withdrawals/${selectedWithdrawal._id}/reject`, {
+      const response = await fetch(`https://satashreejibackend.onrender.com/api/admin/users-withdrawals/${selectedWithdrawal._id}/reject`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('adminToken')}`,

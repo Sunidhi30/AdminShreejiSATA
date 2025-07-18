@@ -70,17 +70,18 @@ function Summary() {
 
   // Clone summaryData and inject API values
   const updatedSummaryData = summaryData.map((item) => {
-    if (item.text === "Total Users" && userCount !== null) {
-      return { ...item, amount: userCount.toString() };
-    }
-    if (item.text === "Total bid amount" && totalBidAmount !== null) {
-      return { ...item, amount: totalBidAmount.toString() };
-    }
-    if (item.text === "Total Revenue" && adminEarnings !== null) {
-      return { ...item, amount: adminEarnings.toString() };
-    }
-    return item;
-  });
+  if (item.text === "Total Users" && userCount !== null && userCount !== undefined) {
+    return { ...item, amount: userCount?.toString() || "0" };
+  }
+  if (item.text === "Total bid amount" && totalBidAmount !== null && totalBidAmount !== undefined) {
+    return { ...item, amount: totalBidAmount?.toString() || "0" };
+  }
+  if (item.text === "Total Revenue" && adminEarnings !== null && adminEarnings !== undefined) {
+    return { ...item, amount: adminEarnings?.toString() || "0" };
+  }
+  return item;
+});
+
 
   return (
     <section className={classes.summary}>

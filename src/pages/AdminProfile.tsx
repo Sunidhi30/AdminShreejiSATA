@@ -50,7 +50,7 @@ const Profile: React.FC = () => {
 
   const fetchProfile = async () => {
     try {
-      const response = await fetch('http://localhost:9000/api/admin/profiles', {
+      const response = await fetch('https://satashreejibackend.onrender.com/api/admin/profiles', {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('adminToken')}`
         }
@@ -76,7 +76,7 @@ const Profile: React.FC = () => {
 
   const fetchEarnings = async () => {
     try {
-      const response = await fetch('http://localhost:9000/api/admin/admin-earnings', {
+      const response = await fetch('https://satashreejibackend.onrender.com/api/admin/admin-earnings', {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('adminToken')}`
         }
@@ -114,7 +114,7 @@ const Profile: React.FC = () => {
         formDataToSend.append('profileImage', profileImage);
       }
 
-      const response = await fetch('http://localhost:9000/api/admin/update', {
+      const response = await fetch('https://satashreejibackend.onrender.com/api/admin/update', {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('adminToken')}`
@@ -151,7 +151,7 @@ const Profile: React.FC = () => {
     setLoading(true);
     
     try {
-      const response = await fetch('http://localhost:9000/api/admin/change-password', {
+      const response = await fetch('https://satashreejibackend.onrender.com/api/admin/change-password', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -33,7 +33,7 @@ const Profile: React.FC = () => {
 
   const fetchProfile = async () => {
     try {
-      const response = await fetch("http://localhost:9000/api/admin/profiles", {
+      const response = await fetch("https://satashreejibackend.onrender.com/api/admin/profiles", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("adminToken") || ""}`,
         },
@@ -51,7 +51,7 @@ const Profile: React.FC = () => {
 
   const fetchEarnings = async () => {
     try {
-      const response = await fetch("http://localhost:9000/api/admin/admin-earnings", {
+      const response = await fetch("https://satashreejibackend.onrender.com/api/admin/admin-earnings", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("adminToken") || ""}`,
         },

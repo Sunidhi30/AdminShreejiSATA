@@ -62,7 +62,7 @@ const UserDeposit: React.FC = () => {
   const fetchTransactions = async () => {
     try {
       setLoading(true);
-      const response = await fetch('http://localhost:9000/api/admin/testing-transactions/deposits', {
+      const response = await fetch('https://satashreejibackend.onrender.com/api/admin/testing-transactions/deposits', {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('adminToken')}`,
           'Content-Type': 'application/json'
@@ -95,7 +95,7 @@ const UserDeposit: React.FC = () => {
     try {
       setActionLoading(prev => ({ ...prev, [transactionId]: true }));
       
-      const response = await fetch(`http://localhost:9000/api/admin/transactions/${transactionId}/action`, {
+      const response = await fetch(`https://satashreejibackend.onrender.com/api/admin/transactions/${transactionId}/action`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('adminToken')}`,
