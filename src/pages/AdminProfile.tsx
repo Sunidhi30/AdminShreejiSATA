@@ -340,7 +340,15 @@ const Profile: React.FC = () => {
               </div>
               <div className="earning-details">
                 <label>Total User Investments</label>
-                <p className="amount">${earnings?.totalUserInvestments?.toLocaleString() || '0'}</p>
+                {/* <p className="amount">${earnings?.totalUserInvestments?.toLocaleString() || '0'}</p> */}
+                 <p className="amount">
+    ₹
+    {earnings?.totalUserInvestments?.toLocaleString('en-IN', {
+      style: 'currency',
+      currency: 'INR',
+      minimumFractionDigits: 2,
+    }).replace('₹', '') || '0'}
+  </p>
               </div>
             </div>
             <div className="earning-item">
@@ -349,7 +357,12 @@ const Profile: React.FC = () => {
               </div>
               <div className="earning-details">
                 <label>Admin Earnings</label>
-                <p className="amount primary">${earnings?.adminEarnings?.toLocaleString() || '0'}</p>
+<p className="amount primary">
+  {earnings?.adminEarnings?.toLocaleString('en-IN', {
+    style: 'currency',
+    currency: 'INR',
+  }) || '₹0.00'}
+</p>
               </div>
             </div>
           </div>

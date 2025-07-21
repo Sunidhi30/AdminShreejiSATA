@@ -1,5 +1,5 @@
 
-import { Clock, DollarSign, Pause, Play, Plus, Target, TrendingUp, Trophy } from "lucide-react";
+import { Clock, IndianRupee, Pause, Play, Plus, Target, TrendingUp, Trophy } from "lucide-react";
 import React, { useState } from "react";
 import "./GamesTable.scss";
 
@@ -253,12 +253,13 @@ const handleSubmit = async (e: React.FormEvent) => {
                 <td>
                   <div className="rates-info">
                     <div className="rate-item">
-                      <DollarSign className="rate-icon" />
+                     <IndianRupee className="rate-icon" />
+
                       <span className="rate-label">Single:</span>
                       <span className="rate-value single">{game.singleDigit}</span>
                     </div>
                     <div className="rate-item">
-                      <DollarSign className="rate-icon" />
+                     <IndianRupee className="rate-icon" />
                       <span className="rate-label">Jodi:</span>
                       <span className="rate-value jodi">{game.jodiDigit}</span>
                     </div>

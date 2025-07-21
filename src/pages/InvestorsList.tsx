@@ -1,4 +1,4 @@
-import { Calendar, ChevronDown, Clock, DollarSign, Mail, TrendingUp, User, Users } from 'lucide-react';
+import { Calendar, ChevronDown, Clock, Mail, TrendingUp, User, Users } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import './investors.scss';
 
@@ -294,7 +294,9 @@ const InvestorList: React.FC = () => {
                   </td>
                   <td>
                     <div className="amount-info">
-                      <DollarSign size={16} />
+                      {/* <DollarSign size={16} /> */}
+                      {/* <IndianRupee size={16} /> */}
+
                       <span className="amount">₹{investor.betAmount}</span>
                     </div>
                   </td>
