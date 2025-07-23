@@ -40,14 +40,15 @@ const Products: React.FC = () => {
         if (data.success && Array.isArray(data.games)) {
           const mappedGames: Game[] = data.games.map((game: any) => ({
             name: game.name,
-            openTime: game.openTime,
-            closeTime: game.closeTime,
-            resultTime: game.resultTime,
+            openTime: new Date(game.openDateTime).toLocaleString(), // ⬅️ formatted nicely
+            closeTime: new Date(game.closeDateTime).toLocaleString(), // ⬅️ formatted nicely
+            resultTime: new Date(game.resultDateTime).toLocaleString(), // ⬅️ formatted nicely
             status: game.status,
             type: game.gameType,
             singleDigit: game.rates.singleDigit,
             jodiDigit: game.rates.jodiDigit,
           }));
+          
           setGames(mappedGames);
         } else {
           throw new Error("Invalid API response");

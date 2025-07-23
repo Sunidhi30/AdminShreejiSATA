@@ -264,8 +264,9 @@ return (
                       </td>
                       <td>
                         <div className="payment-details">
-                          <div>Mobile: {withdrawal.paymentDetails.mobileNumber}</div>
-                          <div>UPI ID: {withdrawal.paymentDetails.upiId}</div>
+                        <div>Mobile: {withdrawal.paymentDetails?.mobileNumber || 'N/A'}</div>
+
+                        <div>UPI ID: {withdrawal.paymentDetails?.upiId || 'N/A'}</div>
                         </div>
                       </td>
                       <td>

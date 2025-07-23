@@ -22,7 +22,10 @@ const sidebarNav = [
         section: "Games List",
         link: "/products", 
       },
-      
+      {
+        section: "Hard Games",
+        link: "/hard-games", 
+      },
 {
     section: "Games Rate",
     link: "/games-rate", 
@@ -95,6 +98,7 @@ const sidebarNav = [
     icon: "bi:chat-dots",
     text: "Discount",
   },
+
   {
     link: "/admin-profile",
     section: "Settings",

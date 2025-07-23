@@ -23,7 +23,6 @@ export const ThemeContextProvider: React.FC = (props) => {
       return prev === "light" ? "dark" : "light";
     });
   }
-
   const themeValue: themeType = {
     theme,
     toggleTheme,

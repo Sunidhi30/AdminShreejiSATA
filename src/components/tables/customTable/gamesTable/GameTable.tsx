@@ -23,11 +23,12 @@ const GamesTable: React.FC<GamesTableProps> = ({ games }) => {
   const [formData, setFormData] = useState({
     name: '',
     type: 'regular',
-    openTime: '',
-    closeTime: '',
-    resultTime: '',
+    openDateTime: '', // ⬅️ Updated
+    closeDateTime: '', // ⬅️ Updated
+    resultDateTime: '', // ⬅️ Updated
     status: 'active'
   });
+  
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setFormData({
@@ -35,6 +36,7 @@ const GamesTable: React.FC<GamesTableProps> = ({ games }) => {
       [e.target.name]: e.target.value
     });
   };
+  
 const handleSubmit = async (e: React.FormEvent) => {
   e.preventDefault();
   try {
@@ -154,37 +156,38 @@ const handleSubmit = async (e: React.FormEvent) => {
               </div>
 
               <div className="form-group">
-                <label>Open Time:</label>
-                <input
-                  type="time"
-                  name="openTime"
-                  value={formData.openTime}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
+  <label>Open DateTime:</label>
+  <input
+    type="datetime-local"
+    name="openDateTime"
+    value={formData.openDateTime}
+    onChange={handleChange}
+    required
+  />
+</div>
 
-              <div className="form-group">
-                <label>Close Time:</label>
-                <input
-                  type="time"
-                  name="closeTime"
-                  value={formData.closeTime}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
+<div className="form-group">
+  <label>Close DateTime:</label>
+  <input
+    type="datetime-local"
+    name="closeDateTime"
+    value={formData.closeDateTime}
+    onChange={handleChange}
+    required
+  />
+</div>
 
-              <div className="form-group">
-                <label>Result Time:</label>
-                <input
-                  type="time"
-                  name="resultTime"
-                  value={formData.resultTime}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
+<div className="form-group">
+  <label>Result DateTime:</label>
+  <input
+    type="datetime-local"
+    name="resultDateTime"
+    value={formData.resultDateTime}
+    onChange={handleChange}
+    required
+  />
+</div>
+
 
               <div className="form-group">
                 <label>Status:</label>

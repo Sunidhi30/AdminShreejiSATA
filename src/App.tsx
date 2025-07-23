@@ -21,7 +21,7 @@ const GamesListWithInvestors =React.lazy(() => import("./pages/InvestorsList"));
 const InvestorList = React.lazy(() => import("./pages/InvestorsList")); // Import the new GameResult page
 const WiinningDetails = React.lazy(() => import("./pages/WinnersList")); // Import the new GameResult page
 const UserWithdraw =React.lazy(() => import("./pages/WithdrawUsers")); // Import the new GameResult page
-const UserDeposit =React.lazy(() => import("./pages/UserDeposit")); // Import the new GameResult page
+const UserDeposit =React.lazy(() => import("./pages/UserDeposit"));
 function App() {
   return (
     <BrowserRouter>
