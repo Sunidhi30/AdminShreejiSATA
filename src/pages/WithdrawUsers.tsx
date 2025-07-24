@@ -271,13 +271,14 @@ return (
                       </td>
                       <td>
                         <div className="wallet-info">
-                          <div>Balance: {formatCurrency(withdrawal.user.wallet.balance)}</div>
-                          <div className="wallet-stats">
-                            <small>
-                              Deposits: {formatCurrency(withdrawal.user.wallet.totalDeposits)} | 
-                              Withdrawals: {formatCurrency(withdrawal.user.wallet.totalWithdrawals)}
-                            </small>
-                          </div>
+                        <div>Balance: {formatCurrency(withdrawal.user.wallet?.balance || 0)}</div>
+<div className="wallet-stats">
+  <small>
+    Deposits: {formatCurrency(withdrawal.user.wallet?.totalDeposits || 0)} | 
+    Withdrawals: {formatCurrency(withdrawal.user.wallet?.totalWithdrawals || 0)}
+  </small>
+</div>
+
                         </div>
                       </td>
                       <td>{formatDate(withdrawal.createdAt)}</td>
