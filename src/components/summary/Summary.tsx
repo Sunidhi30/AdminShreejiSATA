@@ -9,18 +9,18 @@ const summaryData: IsummData[] = [
   {
     icon: "lucide:user",
     text: "Total Users",
-    amount: "salesAmount", // Placeholder
+    amount: "salesAmount", 
     currency: "",
   },
   {
     icon: "mdi:wallet",
     text: "Total bid amount",
-    amount: "orderAmount", // Placeholder
+    amount: "orderAmount", 
     currency: "currency",
   },
   {
     icon: "mdi:currency-inr",
-    text: "Total Revenue", // Total revenue placeholder
+    text: "Total Revenue", 
     amount: "revenueAmount",
     currency: "currency",
   },
@@ -31,11 +31,23 @@ function Summary() {
   const [userCount, setUserCount] = useState<number | null>(null);
   const [totalBidAmount, setTotalBidAmount] = useState<number | null>(null);
   const [adminEarnings, setAdminEarnings] = useState<number | null>(null);
+  const adminToken = localStorage.getItem("adminToken");
 
   useEffect(() => {
     const fetchUserCount = async () => {
       try {
-        const response = await fetch("https://satashreejibackend.onrender.com/api/admin/users-count");
+        const response = await fetch(
+          "https://satashreejibackend.onrender.com/api/admin/users-count",
+          {
+            headers: {
+              Authorization: `Bearer ${adminToken}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        if (!response.ok) {
+          throw new Error("Unauthorized or failed to fetch user count");
+        }
         const data = await response.json();
         setUserCount(data.count);
       } catch (error) {
@@ -43,19 +55,43 @@ function Summary() {
       }
     };
 
-    const fetchTotalBidAmount = async () => {
-      try {
-        const response = await fetch("https://satashreejibackend.onrender.com/api/admin/total-bid-amount");
-        const data = await response.json();
-        setTotalBidAmount(data.totalBidAmount);
-      } catch (error) {
-        console.error("Error fetching total bid amount:", error);
+   
+const fetchTotalBidAmount = async () => {
+  try {
+    const response = await fetch(
+      "https://satashreejibackend.onrender.com/api/admin/total-bid-amount",
+      {
+        headers: {
+          Authorization: `Bearer ${adminToken}`,
+          "Content-Type": "application/json",
+        },
       }
-    };
+    );
+    if (!response.ok) {
+      throw new Error("Unauthorized or failed to fetch total bid amount");
+    }
+    const data = await response.json();
+    setTotalBidAmount(data.totalBidAmount);
+  } catch (error) {
+    console.error("Error fetching total bid amount:", error);
+  }
+};
 
+   
     const fetchAdminEarnings = async () => {
       try {
-        const response = await fetch("https://satashreejibackend.onrender.com/api/admin/admin-earnings");
+        const response = await fetch(
+          "https://satashreejibackend.onrender.com/api/admin/admin-earnings",
+          {
+            headers: {
+              Authorization: `Bearer ${adminToken}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        if (!response.ok) {
+          throw new Error("Unauthorized or failed to fetch admin earnings");
+        }
         const data = await response.json();
         setAdminEarnings(data.adminEarnings);
       } catch (error) {

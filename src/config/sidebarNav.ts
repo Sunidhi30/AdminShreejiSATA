@@ -22,10 +22,10 @@ const sidebarNav = [
         section: "Games List",
         link: "/products", 
       },
-      {
-        section: "Hard Games",
-        link: "/hard-games", 
-      },
+      // {
+      //   section: "Hard Games",
+      //   link: "/hard-games", 
+      // },
 {
     section: "Games Rate",
     link: "/games-rate", 

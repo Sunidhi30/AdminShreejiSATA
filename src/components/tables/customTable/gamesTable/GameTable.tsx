@@ -36,30 +36,38 @@ const GamesTable: React.FC<GamesTableProps> = ({ games }) => {
       [e.target.name]: e.target.value
     });
   };
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
   
-const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
-  try {
-    const adminToken = localStorage.getItem("adminToken"); // get token from localStorage
-    const response = await fetch('https://satashreejibackend.onrender.com/api/admin/games', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${adminToken}`, // add token to header
-      },
-      body: JSON.stringify(formData),
-    });
-
-    if (response.ok) {
-      setShowAddForm(false);
-      // You might want to refresh your games list here
-    } else {
-      throw new Error('Failed to add game');
+    // Adjust datetime fields to ISO format
+    const adjustedFormData = {
+      ...formData,
+      openDateTime: new Date(formData.openDateTime).toISOString(),
+      closeDateTime: new Date(formData.closeDateTime).toISOString(),
+      resultDateTime: new Date(formData.resultDateTime).toISOString(),
+    };
+  
+    try {
+      const adminToken = localStorage.getItem("adminToken");
+      const response = await fetch('http://localhost:9000/api/admin/games', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${adminToken}`,
+        },
+        body: JSON.stringify(adjustedFormData),
+      });
+  
+      if (response.ok) {
+        setShowAddForm(false);
+      } else {
+        throw new Error('Failed to add game');
+      }
+    } catch (error) {
+      console.error('Error adding game:', error);
     }
-  } catch (error) {
-    console.error('Error adding game:', error);
-  }
-};
+  };
+  
 
   // const handleSubmit = async (e: React.FormEvent) => {
   //   e.preventDefault();
