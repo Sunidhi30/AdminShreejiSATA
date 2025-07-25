@@ -30,6 +30,11 @@ const sidebarNav = [
     section: "Games Rate",
     link: "/games-rate", 
 },
+///hard-games
+{
+  section: "Hard Games",
+  link: "/hard-games", 
+},
        {
         section: "Games Results",
         link: "/game-results", 

@@ -22,6 +22,7 @@ const InvestorList = React.lazy(() => import("./pages/InvestorsList")); // Impor
 const WiinningDetails = React.lazy(() => import("./pages/WinnersList")); // Import the new GameResult page
 const UserWithdraw =React.lazy(() => import("./pages/WithdrawUsers")); // Import the new GameResult page
 const UserDeposit =React.lazy(() => import("./pages/UserDeposit"));
+const Hardgames = React.lazy(() => import("./pages/UploadGameForm"));
 function App() {
   return (
     <BrowserRouter>
@@ -35,6 +36,8 @@ function App() {
               <Route path="/products" element={<Products />} />
               <Route path="/products/:productId" element={<ProductEdit />} />
                 <Route path="/games-rate" element={<GamesRate />} /> {/* Add this new route */}
+                <Route path="/hard-games" element={<Hardgames />} /> {/* Add this new route */}
+
                           <Route path="/game-results" element={<GameResult />} />
 <Route path="/investors-list" element={<GamesListWithInvestors />} />
              <Route path="/admin/investors" element={<InvestorList />} />

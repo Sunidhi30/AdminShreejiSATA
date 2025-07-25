@@ -49,7 +49,7 @@ const GamesTable: React.FC<GamesTableProps> = ({ games }) => {
   
     try {
       const adminToken = localStorage.getItem("adminToken");
-      const response = await fetch('https://satashreejibackend.onrender.com/api/admin/games', {
+      const response = await fetch('http://localhost:9000/api/admin/games', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
