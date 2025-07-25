@@ -283,9 +283,10 @@ const formatDateTime = (dateString: string) => {
                   <th>Game</th>
                   <th>Open Result</th>
                   <th>Close Result</th>
-                  <th>Spinner Result</th>
-                  <th>Declared At</th>
+                  {/* <th>Spinner Result</th> */}
+                  {/* <th>Declared At</th> */}
                 </tr>
+
               </thead>
               <tbody>
                 {results.length === 0 ? (
@@ -306,9 +307,9 @@ const formatDateTime = (dateString: string) => {
                       <td className="result-digit">
                         {result.closeResult !== undefined ? result.closeResult : '-'}
                       </td>
-                      <td className="result-digit">
+                      {/* <td className="result-digit">
                         {result.spinnerResult !== undefined ? result.spinnerResult : '-'}
-                      </td>
+                      </td> */}
                      <td>{formatDateTime(result.createdAt)}</td>
 
                     </tr>
@@ -393,7 +394,7 @@ const formatDateTime = (dateString: string) => {
               </div>
 
               <div className="form-group">
-                <label htmlFor="openResult">Open Result (0-9):</label>
+                <label htmlFor="openResult">Open Result (0-99):</label>
                 <input
                   type="number"
                   id="openResult"
@@ -401,13 +402,13 @@ const formatDateTime = (dateString: string) => {
                   value={formData.openResult}
                   onChange={handleInputChange}
                   min="0"
-                  max="9"
+                  max="99"
                   placeholder="Optional"
                 />
               </div>
 
               <div className="form-group">
-                <label htmlFor="closeResult">Close Result (0-9):</label>
+                {/* <label htmlFor="closeResult">Close Result (0-9):</label> */}
                 <input
                   type="number"
                   id="closeResult"
@@ -415,11 +416,11 @@ const formatDateTime = (dateString: string) => {
                   value={formData.closeResult}
                   onChange={handleInputChange}
                   min="0"
-                  max="9"
+                  max="99"
                   placeholder="Optional"
                 />
               </div>
-
+{/* 
               <div className="form-group">
                 <label htmlFor="spinnerResult">Spinner Result (0-9):</label>
                 <input
@@ -432,7 +433,7 @@ const formatDateTime = (dateString: string) => {
                   max="9"
                   placeholder="Optional"
                 />
-              </div>
+              </div> */}
 
               <div className="form-actions">
                 <button

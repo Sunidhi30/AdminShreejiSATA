@@ -71,7 +71,7 @@ const fetchTotalBidAmount = async () => {
       throw new Error("Unauthorized or failed to fetch total bid amount");
     }
     const data = await response.json();
-    setTotalBidAmount(data.totalBidAmount);
+    setTotalBidAmount(data.bidAmount);
   } catch (error) {
     console.error("Error fetching total bid amount:", error);
   }

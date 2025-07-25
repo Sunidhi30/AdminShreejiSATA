@@ -10,7 +10,7 @@ interface Game {
 interface GameRate {
   _id: string;
   gameId: Game;
-  rateType: 'single_digit' | 'jodi_digit' | 'spinner';
+  rateType: 'single_digit';
   rate: number;
   minBet: number;
   maxBet: number;
@@ -19,7 +19,7 @@ interface GameRate {
 }
 
 interface RateFormData {
-  rateType: 'single_digit' | 'jodi_digit' | 'spinner';
+  rateType: 'single_digit' ;
   rate: number;
   minBet: number;
   maxBet: number;
@@ -152,8 +152,8 @@ const GamesRate: React.FC = () => {
                 onChange={(e) => setFormData({...formData, rateType: e.target.value as any})}
               >
                 <option value="single_digit">Single Digit</option>
-                <option value="jodi_digit">Jodi Digit</option>
-                <option value="spinner">Spinner</option>
+                {/* <option value="jodi_digit">Jodi Digit</option>
+                <option value="spinner">Spinner</option> */}
               </select>
             </div>
 
