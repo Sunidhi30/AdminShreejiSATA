@@ -43,7 +43,7 @@ const AdminGames: React.FC = () => {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
-  const baseURL = 'http://localhost:9000/api/admin/games';
+  const baseURL = 'https://satashreejibackend.onrender.com/api/admin/games';
 
   // Get token from localStorage
   const getAuthToken = (): string | null => {

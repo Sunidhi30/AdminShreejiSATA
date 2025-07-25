@@ -32,7 +32,7 @@ const sidebarNav = [
 },
 ///hard-games
 {
-  section: "Hard Games",
+  section: "Spinners Games",
   link: "/hard-games", 
 },
        {

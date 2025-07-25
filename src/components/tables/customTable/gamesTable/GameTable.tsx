@@ -20,6 +20,8 @@ interface GamesTableProps {
 
 const GamesTable: React.FC<GamesTableProps> = ({ games }) => {
   const [showAddForm, setShowAddForm] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
   const [formData, setFormData] = useState({
     name: '',
     type: 'regular',
@@ -39,7 +41,6 @@ const GamesTable: React.FC<GamesTableProps> = ({ games }) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
   
-    // Adjust datetime fields to ISO format
     const adjustedFormData = {
       ...formData,
       openDateTime: new Date(formData.openDateTime).toISOString(),
@@ -49,7 +50,7 @@ const GamesTable: React.FC<GamesTableProps> = ({ games }) => {
   
     try {
       const adminToken = localStorage.getItem("adminToken");
-      const response = await fetch('http://localhost:9000/api/admin/games', {
+      const response = await fetch('https://satashreejibackend.onrender.com/api/admin/games', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -58,15 +59,52 @@ const GamesTable: React.FC<GamesTableProps> = ({ games }) => {
         body: JSON.stringify(adjustedFormData),
       });
   
+      const data = await response.json();
+  
       if (response.ok) {
+        setErrorMessage(null); // Clear errors
         setShowAddForm(false);
+        // Optionally: refresh games list
       } else {
-        throw new Error('Failed to add game');
+        setErrorMessage(data.message || 'Failed to add game');
       }
     } catch (error) {
       console.error('Error adding game:', error);
+      setErrorMessage('Something went wrong. Please try again.');
     }
   };
+  
+  // const handleSubmit = async (e: React.FormEvent) => {
+  //   e.preventDefault();
+  
+  //   // Adjust datetime fields to ISO format
+  //   const adjustedFormData = {
+  //     ...formData,
+  //     openDateTime: new Date(formData.openDateTime).toISOString(),
+  //     closeDateTime: new Date(formData.closeDateTime).toISOString(),
+  //     resultDateTime: new Date(formData.resultDateTime).toISOString(),
+  //   };
+  
+  //   try {
+  //     const adminToken = localStorage.getItem("adminToken");
+  //     const response = await fetch('http://localhost:9000/api/admin/games', {
+  //       method: 'POST',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //         Authorization: `Bearer ${adminToken}`,
+  //       },
+  //       body: JSON.stringify(adjustedFormData),
+  //     });
+  
+  //     if (response.ok) {
+  //       setShowAddForm(false);
+  //     } else {
+  //       throw new Error('Failed to add game');
+  //     }
+  //   } catch (error) {
+  //     console.error('Error adding game:', error);
+  //   }
+  // };
   
 
   // const handleSubmit = async (e: React.FormEvent) => {
@@ -143,6 +181,12 @@ const GamesTable: React.FC<GamesTableProps> = ({ games }) => {
         <div className="add-game-modal">
           <div className="add-game-form">
             <h2>Add New Game</h2>
+              {/* ⬇️ Insert this line here */}
+      {errorMessage && (
+        <div className="error-message" style={{ color: 'red', marginBottom: '10px' }}>
+          {errorMessage}
+        </div>
+      )}
             <form onSubmit={handleSubmit}>
               <div className="form-group">
                 <label>Game Name:</label>

@@ -32,6 +32,36 @@ const CustomTable: React.FC<Props> = (props) => {
   function showModalHandler() {
     setShowModal((prev) => !prev);
   }
+  const handleDeleteUser = async (userId: string) => {
+    if (!userId) return;
+  
+    try {
+      const token = localStorage.getItem("adminToken");
+      if (!token) {
+        console.error("Admin token not found in localStorage");
+        return;
+      }
+  
+      const response = await fetch(`https://satashreejibackend.onrender.com/api/admin/user/${userId}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+  
+      const data = await response.json();
+  
+      if (data.success) {
+        setUsers((prev) => prev.filter((user) => user._id !== userId));
+        setDataShow((prev) => prev.filter((user) => user._id !== userId));
+      } else {
+        console.error("Delete failed:", data.message);
+      }
+    } catch (error) {
+      console.error("Error deleting user:", error);
+    }
+  };
+  
 
   function tableBody(item: UserWithWallet, index: number) {
     if ("email" in item) {
@@ -54,10 +84,11 @@ const CustomTable: React.FC<Props> = (props) => {
           <td className={classes.actions}>
             <Icon icon="charm:menu-kebab" />
             <div className={classes.actions__box}>
-              <div
-                className={classes.actions__delete}
-                onClick={showModalHandler}
-              >
+            <div
+  className={classes.actions__delete}
+  onClick={() => handleDeleteUser(item._id)}
+>
+
                 <Icon icon="fluent:delete-24-regular" width="24" />
               </div>
               <div className={classes.actions__edit}>
