@@ -1,3 +1,4 @@
+
 import { Icon } from "@iconify/react";
 import { useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -18,8 +19,13 @@ function Sidebar() {
   const loginCtx = useContext(LoginContext);
   const { t } = useTranslation();
 
+  // Check if we're in mobile/tablet view
+  const isMobileView = width <= 768;
+
   function openSidebarHandler() {
-    if (width <= 768) document.body.classList.toggle("sidebar__open");
+    if (isMobileView) {
+      document.body.classList.toggle("sidebar__open");
+    }
   }
 
   function logoutHandler() {
@@ -28,6 +34,10 @@ function Sidebar() {
   }
 
   function toggleDropdown(index: number) {
+    // Don't allow dropdown toggle in mobile view when sidebar is collapsed
+    if (isMobileView && !document.body.classList.contains("sidebar__open")) {
+      return;
+    }
     setOpenDropdown(openDropdown === index ? null : index);
   }
 
@@ -46,10 +56,37 @@ function Sidebar() {
     setActiveIndex(activeItem >= 0 ? activeItem : 0);
   }, [location]);
 
+  // Close dropdown when switching to mobile view
+  useEffect(() => {
+    if (isMobileView) {
+      setOpenDropdown(null);
+    }
+  }, [isMobileView]);
+
+  // Close sidebar when clicking outside in mobile view
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (isMobileView && document.body.classList.contains("sidebar__open")) {
+        const sidebar = document.querySelector(`.${classes.sidebar}`);
+        if (sidebar && !sidebar.contains(event.target as Node)) {
+          document.body.classList.remove("sidebar__open");
+        }
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isMobileView]);
+
+  // Determine if sidebar should show collapsed state
+  const isCollapsed = isMobileView ? !document.body.classList.contains("sidebar__open") : !sidebarCtx.isOpen;
+
   return (
     <div
       className={`${classes.sidebar} ${
-        !sidebarCtx.isOpen && classes.sidebar_close
+        isCollapsed && classes.sidebar_close
       }`}
     >
       <div className={classes.sidebar__logo}>
@@ -67,30 +104,35 @@ function Sidebar() {
                     activeIndex === index && classes.active
                   }`}
                   onClick={() => toggleDropdown(index)}
+                  data-section={nav.section}
                 >
                   <div className={classes.sidebar__menu__item__icon}>
                     <Icon icon={nav.icon} />
                   </div>
-                  <div className={classes.sidebar__menu__item__txt}>
-                    {t(nav.section)}
-                  </div>
-                  <div
-                    className={`${classes.sidebar__menu__item__chevron} ${
-                      openDropdown === index ? classes.open : ""
-                    }`}
-                  >
-                    <Icon
-                      icon={
-                        openDropdown === index
-                          ? "tabler:chevron-up"
-                          : "tabler:chevron-down"
-                      }
-                    />
-                  </div>
+                  {(!isMobileView || document.body.classList.contains("sidebar__open")) && (
+                    <>
+                      <div className={classes.sidebar__menu__item__txt}>
+                        {t(nav.section)}
+                      </div>
+                      <div
+                        className={`${classes.sidebar__menu__item__chevron} ${
+                          openDropdown === index ? classes.open : ""
+                        }`}
+                      >
+                        <Icon
+                          icon={
+                            openDropdown === index
+                              ? "tabler:chevron-up"
+                              : "tabler:chevron-down"
+                          }
+                        />
+                      </div>
+                    </>
+                  )}
                 </div>
 
                 {/* Dropdown submenu */}
-                {openDropdown === index && (
+                {openDropdown === index && (!isMobileView || document.body.classList.contains("sidebar__open")) && (
                   <div className={classes.sidebar__submenu}>
                     {nav.children.map((child, childIdx) => (
                       <Link
@@ -113,13 +155,16 @@ function Sidebar() {
                   activeIndex === index && classes.active
                 }`}
                 onClick={openSidebarHandler}
+                data-section={nav.section}
               >
                 <div className={classes.sidebar__menu__item__icon}>
                   <Icon icon={nav.icon} />
                 </div>
-                <div className={classes.sidebar__menu__item__txt}>
-                  {t(nav.section)}
-                </div>
+                {(!isMobileView || document.body.classList.contains("sidebar__open")) && (
+                  <div className={classes.sidebar__menu__item__txt}>
+                    {t(nav.section)}
+                  </div>
+                )}
               </Link>
             )}
           </div>
@@ -135,9 +180,11 @@ function Sidebar() {
           <div className={classes.sidebar__menu__item__icon}>
             <Icon icon="tabler:logout" />
           </div>
-          <div className={classes.sidebar__menu__item__txt}>
-            {t("logout")}
-          </div>
+          {(!isMobileView || document.body.classList.contains("sidebar__open")) && (
+            <div className={classes.sidebar__menu__item__txt}>
+              {t("logout")}
+            </div>
+          )}
         </Link>
       </div>
     </div>
