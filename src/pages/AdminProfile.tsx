@@ -85,7 +85,7 @@ const Profile: React.FC = () => {
         fetch('https://satashreejibackend.onrender.com/api/admin/admin-earnings', {
           headers: { 'Authorization': `Bearer ${token}` }
         }),
-        fetch('http://localhost:9000/api/admin/total-bid-amount', {
+        fetch('https://satashreejibackend.onrender.com/api/admin/total-bid-amount', {
           headers: { 'Authorization': `Bearer ${token}` }
         })
       ]);
