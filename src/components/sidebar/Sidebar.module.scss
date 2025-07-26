@@ -278,7 +278,8 @@
       
       &__item {
         padding: 0.6rem;
-        justify-content: center;
+        justify-content: flex-start;
+
         
         &__icon {
           margin-right: 0;
@@ -293,15 +294,15 @@
     }
   }
 }
-
 @include mobile {
   .sidebar {
     width: var(--sidebar-collapsed-width);
     left: -100%;
-    
+
+    // ✅ Override sidebar width when open on mobile
     :global(body.sidebar__open) & {
       left: 0;
-      width: 100vw;
+      width: 80vw; // or use: width: 280px;
       
       .sidebar__menu__item__txt,
       .sidebar__submenu {
@@ -334,6 +335,47 @@
     }
   }
 }
+
+// @include mobile {
+//   .sidebar {
+//     width: var(--sidebar-collapsed-width);
+//     left: -100%;
+    
+//     :global(body.sidebar__open) & {
+//       left: 0;
+//       width: 100vw;
+      
+//       .sidebar__menu__item__txt,
+//       .sidebar__submenu {
+//         opacity: 1;
+//         visibility: visible;
+//       }
+//     }
+
+//     &__logo {
+//       padding: 0.5rem 12px;
+      
+//       img {
+//         --size: 2.5rem;
+//         width: var(--size);
+//         height: var(--size);
+//       }
+//     }
+
+//     &__menu {
+//       &__item {
+//         &__icon {
+//           margin-right: 0;
+//         }
+//       }
+//     }
+
+//     &__submenu {
+//       margin-left: 0.5rem;
+//       margin-right: 0.5rem;
+//     }
+//   }
+// }
 
 // RTL Support
 html[dir="rtl"] {
