@@ -54,7 +54,7 @@ const Table = () => {
       <div className={`${classes.table__top__customers} ${classes.table__child}`}>
         <div className={classes.table__title}>
           <p className="subTitle">{t("topCustomers")}</p>
-          <Link to="/">{t("viewAll")}</Link>
+          <Link to="/customers">{t("viewAll")}</Link>
         </div>
         <CustomTable
           headData={data.topCustomers.head}
