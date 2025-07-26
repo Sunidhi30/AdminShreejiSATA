@@ -691,24 +691,24 @@
 
 /* Dark theme */
 [data-theme="dark"] {
-  --background-primary: #0d1117;
-  --background-secondary: rgba(22, 27, 34, 0.8);
-  --text-color: #f0f6fc;
-  --text-color-secondary: #8b949e;
-  --border-color: rgba(48, 54, 61, 0.8);
-  --primary-color: #ff6b6d;
-  --primary-color-dark: #e55357;
-  --red-color: #ff6b6d;
-  --red-color-dark: #e55357;
-  --error-bg: rgba(68, 0, 0, 0.3);
-  --error-color: #ff7875;
-  --error-border: rgba(139, 0, 0, 0.5);
-  --success-bg: rgba(0, 51, 0, 0.3);
-  --success-color: #52c41a;
-  --success-border: rgba(0, 100, 0, 0.5);
-  --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
-  --enhanced-card-shadow: 0 8px 30px rgba(0, 0, 0, 0.6);
-  --enhanced-card-shadow-hover: 0 15px 40px rgba(255, 107, 109, 0.2);
+  --background-primary: #121212;
+  --background-secondary: rgba(30, 30, 30, 0.9);
+  --text-color: #e0e0e0;
+  --text-color-secondary: #a0a0a0;
+  --border-color: rgba(51, 51, 51, 0.8);
+  --primary-color: #ff4d4f;
+  --primary-color-dark: #d9363e;
+  --red-color: #ff4d4f;
+  --red-color-dark: #d9363e;
+  --error-bg: rgba(68, 0, 0, 0.4);
+  --error-color: #ff6b6b;
+  --error-border: rgba(139, 0, 0, 0.6);
+  --success-bg: rgba(0, 51, 0, 0.4);
+  --success-color: #4caf50;
+  --success-border: rgba(0, 100, 0, 0.6);
+  --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+  --enhanced-card-shadow: 0 8px 30px rgba(0, 0, 0, 0.8);
+  --enhanced-card-shadow-hover: 0 15px 40px rgba(255, 77, 79, 0.25);
 }
 
 /* Animations */

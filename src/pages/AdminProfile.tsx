@@ -9,11 +9,14 @@ interface Admin {
   isActive: boolean;
   createdAt: string;
   earnings?: number;
+  
 }
 
 interface EarningsData {
-  totalUserInvestments: number;
+  totalUserInvestments?: number; // make it optional with `?`
   adminEarnings: number;
+  bidAmount?: number; // <-- added
+
 }
 
 const Profile: React.FC = () => {
@@ -48,6 +51,7 @@ const Profile: React.FC = () => {
     fetchEarnings();
   }, []);
 
+  
   const fetchProfile = async () => {
     try {
       const response = await fetch('https://satashreejibackend.onrender.com/api/admin/profiles', {
@@ -73,21 +77,31 @@ const Profile: React.FC = () => {
       setLoading(false);
     }
   };
-
   const fetchEarnings = async () => {
     try {
-      const response = await fetch('https://satashreejibackend.onrender.com/api/admin/admin-earnings', {
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('adminToken')}`
-        }
+      const token = localStorage.getItem('adminToken');
+  
+      const [earningsRes, bidAmountRes] = await Promise.all([
+        fetch('https://satashreejibackend.onrender.com/api/admin/admin-earnings', {
+          headers: { 'Authorization': `Bearer ${token}` }
+        }),
+        fetch('http://localhost:9000/api/admin/total-bid-amount', {
+          headers: { 'Authorization': `Bearer ${token}` }
+        })
+      ]);
+  
+      const earningsData = await earningsRes.json();
+      const bidAmountData = await bidAmountRes.json();
+  
+      setEarnings({
+        adminEarnings: earningsData.adminEarnings,
+        bidAmount: bidAmountData.bidAmount
       });
-      const data = await response.json();
-      setEarnings(data);
     } catch (error) {
       console.error('Error fetching earnings:', error);
     }
   };
-
+  
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -334,23 +348,21 @@ const Profile: React.FC = () => {
             <i className="fas fa-chart-line"></i>
           </div>
           <div className="earnings-content">
-            <div className="earning-item">
-              <div className="earning-icon">
-                <i className="fas fa-coins"></i>
-              </div>
-              <div className="earning-details">
-                <label>Total User Investments</label>
-                {/* <p className="amount">${earnings?.totalUserInvestments?.toLocaleString() || '0'}</p> */}
-                 <p className="amount">
-    ₹
-    {earnings?.totalUserInvestments?.toLocaleString('en-IN', {
-      style: 'currency',
-      currency: 'INR',
-      minimumFractionDigits: 2,
-    }).replace('₹', '') || '0'}
-  </p>
-              </div>
-            </div>
+          <div className="earning-item">
+  <div className="earning-icon">
+    <i className="fas fa-coins"></i>
+  </div>
+  <div className="earning-details">
+    <label>Total Bid Amount</label>
+    <p className="amount">
+      {earnings?.bidAmount?.toLocaleString('en-IN', {
+        style: 'currency',
+        currency: 'INR',
+      }) || '₹0.00'}
+    </p>
+  </div>
+</div>
+
             <div className="earning-item">
               <div className="earning-icon">
                 <i className="fas fa-wallet"></i>
