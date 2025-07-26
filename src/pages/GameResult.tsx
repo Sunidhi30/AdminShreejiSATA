@@ -55,7 +55,7 @@ const GameResult: React.FC = () => {
   });
   const [submitting, setSubmitting] = useState<boolean>(false);
 
-  const API_BASE_URL = 'https://satashreejibackend.onrender.com/api/user/user-gaming-history/api/admin';
+  const API_BASE_URL = 'https://satashreejibackend.onrender.com/api/admin';
 
   const getAuthHeaders = () => {
     const token = localStorage.getItem('adminToken');

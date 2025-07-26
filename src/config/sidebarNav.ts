@@ -52,30 +52,30 @@ const sidebarNav = [
         section: "Winner Prediction",
         link: "/investors-list", 
       },
-{
-    section: "Profit/Loss",
-    link: "/games-rate", 
-},
-       {
-        section: "Winning Details",
-        link: "/Winning-details", 
-      },
-       {
-        section: "Bet Filter",
-        link: "/game-results", 
-      },
-       {
-        section: "Customer Sell Report",
-        link: "/game-results", 
-      },
-       {
-        section: "Bid History",
-        link: "/game-results", 
-      },
-      {
-        section: "Withdrawal Report",
-        link: "/game-results", 
-      },
+// {
+//     section: "Profit/Loss",
+//     link: "/games-rate", 
+// },
+      //  {
+      //   section: "Winning Details",
+      //   link: "/Winning-details", 
+      // },
+      //  {
+      //   section: "Bet Filter",
+      //   link: "/game-results", 
+      // },
+      //  {
+      //   section: "Customer Sell Report",
+      //   link: "/game-results", 
+      // // },
+      //  {
+      //   section: "Bid History",
+      //   link: "/game-results", 
+      // },
+      // {
+      //   section: "Withdrawal Report",
+      //   link: "/game-results", 
+      // },
     ],
   },
   
