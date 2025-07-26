@@ -78,3 +78,5 @@ const SaleChart = () => {
 };
 
 export default SaleChart;
+// 🚀 FRONTEND (Updated SaleChart Component with Live API Integration)
+// 🚀 FRONTEND (Corrected SaleChart Component with TypeScript Fixes)
