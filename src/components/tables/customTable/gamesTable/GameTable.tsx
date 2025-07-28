@@ -1,5 +1,4 @@
-
-
+// import axios from "axios";
 // import { Clock, Edit, IndianRupee, Pause, Play, Plus, Target, Trash2, TrendingUp, Trophy, X } from "lucide-react";
 // import React, { useState } from "react";
 // import "./GamesTable.scss";
@@ -12,6 +11,7 @@
 //   resultTime: string;
 //   status: string;
 //   type: string;
+//   gameType?: string; // Backend uses gameType
 //   singleDigit: number;
 //   jodiDigit: number;
 //   openDateTime?: string;
@@ -32,6 +32,7 @@
 //   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 //   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 //   const [isDeleting, setIsDeleting] = useState<string | null>(null);
+//   const [isUpdating, setIsUpdating] = useState(false);
 
 //   const [formData, setFormData] = useState({
 //     name: '',
@@ -41,6 +42,9 @@
 //     resultDateTime: '',
 //     status: 'active'
 //   });
+
+//   // API Base URL - Update this to match your backend
+//   const API_BASE_URL = 'http://localhost:9000'; // or 'https://satashreejibackend.onrender.com'
 
 //   const resetForm = () => {
 //     setFormData({
@@ -74,7 +78,7 @@
 
 //     try {
 //       const adminToken = localStorage.getItem("adminToken");
-//       const response = await fetch('https://satashreejibackend.onrender.com/api/admin/games', {
+//       const response = await fetch(`${API_BASE_URL}/api/admin/games`, {
 //         method: 'POST',
 //         headers: {
 //           'Content-Type': 'application/json',
@@ -100,86 +104,102 @@
 //     }
 //   };
 
+//   const formatDateTime = (dateStr: string | Date) => {
+//     if (!dateStr) return '';
+//     const date = new Date(dateStr);
+//     if (isNaN(date.getTime())) {
+//       console.warn("Invalid date string:", dateStr);
+//       return '';
+//     }
+//     return date.toISOString().slice(0, 16);
+//   };
+
 //   const handleEdit = (game: Game) => {
 //     setEditingGame(game);
-//     setOriginalGameData({ ...game }); // Store original data
+//     setOriginalGameData({ ...game });
     
-//     // Convert existing datetime strings to the format expected by datetime-local input
-//  const formatDateTime = (dateStr: string) => {
-//   if (!dateStr) return '';
-//   const date = new Date(dateStr);
-//   if (isNaN(date.getTime())) {
-//     console.warn("Invalid date string:", dateStr);
-//     return '';
-//   }
-//   return date.toISOString().slice(0, 16);
-// };
-
-
 //     setFormData({
-//       name: game.name,
-//       type: game.type,
+//       name: game.name || '',
+//       type: game.type || game.gameType || 'regular',
 //       openDateTime: game.openDateTime 
-//       ? formatDateTime(game.openDateTime) 
-//       : game.openTime 
-//         ? formatDateTime(game.openTime) 
-//         : '',
-    
-//     closeDateTime: game.closeDateTime 
-//       ? formatDateTime(game.closeDateTime) 
-//       : game.closeTime 
-//         ? formatDateTime(game.closeTime) 
-//         : '',
-    
-//     resultDateTime: game.resultDateTime 
-//       ? formatDateTime(game.resultDateTime) 
-//       : game.resultTime 
-//         ? formatDateTime(game.resultTime) 
-//         : '',
-    
-//       status: game.status
+//         ? formatDateTime(game.openDateTime) 
+//         : game.openTime 
+//           ? formatDateTime(game.openTime) 
+//           : '',
+//       closeDateTime: game.closeDateTime 
+//         ? formatDateTime(game.closeDateTime) 
+//         : game.closeTime 
+//           ? formatDateTime(game.closeTime) 
+//           : '',
+//       resultDateTime: game.resultDateTime 
+//         ? formatDateTime(game.resultDateTime) 
+//         : game.resultTime 
+//           ? formatDateTime(game.resultTime) 
+//           : '',
+//       status: game.status || 'active'
 //     });
 //     setShowEditForm(true);
 //   };
 
-//   const handleEditSubmit = async (e: React.FormEvent) => {
+//   const handleEditSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 //     e.preventDefault();
-//     if (!editingGame?._id) return;
+//     setIsUpdating(true);
+//     setErrorMessage(null);
 
-//     const adjustedFormData = {
-//       ...formData,
-//       openDateTime: new Date(formData.openDateTime).toISOString(),
-//       closeDateTime: new Date(formData.closeDateTime).toISOString(),
-//       resultDateTime: new Date(formData.resultDateTime).toISOString(),
+//     const form = e.target as HTMLFormElement;
+//     const formData = new FormData(form);
+
+//     const updateData: any = {
+//       name: formData.get("name"),
+//       gameType: formData.get("type"), // Backend expects gameType
+//       status: formData.get("status"),
 //     };
+
+//     const openDateTime = formData.get("openDateTime");
+//     const closeDateTime = formData.get("closeDateTime");
+//     const resultDateTime = formData.get("resultDateTime");
+
+//     if (typeof openDateTime === "string" && openDateTime) {
+//       updateData.openDateTime = new Date(openDateTime).toISOString();
+//     }
+//     if (typeof closeDateTime === "string" && closeDateTime) {
+//       updateData.closeDateTime = new Date(closeDateTime).toISOString();
+//     }
+//     if (typeof resultDateTime === "string" && resultDateTime) {
+//       updateData.resultDateTime = new Date(resultDateTime).toISOString();
+//     }
+
+//     console.log("Update Data", updateData);
 
 //     try {
 //       const adminToken = localStorage.getItem("adminToken");
-//       const response = await fetch(`https://satashreejibackend.onrender.com/api/admin/games/${editingGame._id}`, {
-//         method: 'PUT',
-//         headers: {
-//           'Content-Type': 'application/json',
-//           Authorization: `Bearer ${adminToken}`,
-//         },
-//         body: JSON.stringify(adjustedFormData),
-//       });
+      
+//       const response = await axios.put(
+//         `${API_BASE_URL}/api/admin/games/${editingGame?._id}`,
+//         updateData,
+//         {
+//           headers: {
+//             'Content-Type': 'application/json',
+//             Authorization: `Bearer ${adminToken}`,
+//           }
+//         }
+//       );
 
-//       const data = await response.json();
-
-//       if (response.ok) {
-//         setErrorMessage(null);
-//         setSuccessMessage('Game updated successfully!');
-//         resetForm();
-//         setShowEditForm(false);
-//         setEditingGame(null);
-//         setOriginalGameData(null);
-//         onGameUpdated?.();
-//       } else {
-//         setErrorMessage(data.message || 'Failed to update game');
-//       }
-//     } catch (error) {
-//       console.error('Error updating game:', error);
-//       setErrorMessage('Something went wrong. Please try again.');
+//       console.log("Game updated successfully", response.data);
+      
+//       setSuccessMessage('Game updated successfully!');
+//       setShowEditForm(false);
+//       setEditingGame(null);
+//       setOriginalGameData(null);
+//       resetForm();
+//       onGameUpdated?.();
+      
+//     } catch (error: any) {
+//       console.error("Error updating game:", error);
+//       const errorMsg = error.response?.data?.message || error.message || 'Failed to update game';
+//       setErrorMessage(errorMsg);
+//     } finally {
+//       setIsUpdating(false);
 //     }
 //   };
 
@@ -192,7 +212,7 @@
 
 //     try {
 //       const adminToken = localStorage.getItem("adminToken");
-//       const response = await fetch(`https://satashreejibackend.onrender.com/api/admin/games/${gameId}`, {
+//       const response = await fetch(`${API_BASE_URL}/api/admin/games/${gameId}`, {
 //         method: 'DELETE',
 //         headers: {
 //           Authorization: `Bearer ${adminToken}`,
@@ -219,17 +239,20 @@
 //   const isFieldModified = (fieldName: keyof typeof formData) => {
 //     if (!originalGameData) return false;
     
-//     const originalValue = originalGameData[fieldName as keyof Game];
-//     const currentValue = formData[fieldName];
+//     let originalValue: any;
+//     let currentValue = formData[fieldName];
     
-//     // For datetime fields, we need to format the original value for comparison
-//     if (fieldName.includes('DateTime') && originalValue) {
-//       const formatDateTime = (dateStr: string) => {
-//         if (!dateStr) return '';
-//         const date = new Date(dateStr);
-//         return date.toISOString().slice(0, 16);
-//       };
-//       return formatDateTime(originalValue as string) !== currentValue;
+//     // Handle type field mapping
+//     if (fieldName === 'type') {
+//       originalValue = originalGameData.type || originalGameData.gameType;
+//     } else if (fieldName.includes('DateTime')) {
+//       // For datetime fields, we need to format the original value for comparison
+//       const originalField = originalGameData[fieldName as keyof Game] as string;
+//       if (originalField) {
+//         originalValue = formatDateTime(originalField);
+//       }
+//     } else {
+//       originalValue = originalGameData[fieldName as keyof Game];
 //     }
     
 //     return originalValue !== currentValue;
@@ -263,7 +286,7 @@
 //     },
 //   ];
 
-//   const displayGames = games.length > 0 ? games : sampleGames;
+//   const displayGames = games;
 
 //   return (
 //     <div className="games-table">
@@ -350,12 +373,12 @@
 //               <div className="form-group">
 //                 <label>Open DateTime:</label>
 //                 <input
-//   type="datetime-local"
-//   name="openDateTime"
-//   value={formData.openDateTime}
-//   onChange={handleChange}
-//   className={isFieldModified('openDateTime') ? 'modified-field' : ''}
-// />
+//                   type="datetime-local"
+//                   name="openDateTime"
+//                   value={formData.openDateTime}
+//                   onChange={handleChange}
+//                   required
+//                 />
 //               </div>
 
 //               <div className="form-group">
@@ -435,7 +458,7 @@
 //                 </div>
 //                 <div className="original-item">
 //                   <span className="label">Type:</span>
-//                   <span className="value">{originalGameData.type}</span>
+//                   <span className="value">{originalGameData.type || originalGameData.gameType}</span>
 //                 </div>
 //                 <div className="original-item">
 //                   <span className="label">Status:</span>
@@ -487,7 +510,6 @@
 //                   value={formData.openDateTime}
 //                   onChange={handleChange}
 //                   className={isFieldModified('openDateTime') ? 'modified-field' : ''}
-//                   required
 //                 />
 //               </div>
 
@@ -500,7 +522,6 @@
 //                   value={formData.closeDateTime}
 //                   onChange={handleChange}
 //                   className={isFieldModified('closeDateTime') ? 'modified-field' : ''}
-//                   required
 //                 />
 //               </div>
 
@@ -513,7 +534,6 @@
 //                   value={formData.resultDateTime}
 //                   onChange={handleChange}
 //                   className={isFieldModified('resultDateTime') ? 'modified-field' : ''}
-//                   required
 //                 />
 //               </div>
 
@@ -532,7 +552,13 @@
 //               </div>
 
 //               <div className="form-actions">
-//                 <button type="submit" className="submit-btn">Update Game</button>
+//                 <button 
+//                   type="submit" 
+//                   className="submit-btn"
+//                   disabled={isUpdating}
+//                 >
+//                   {isUpdating ? 'Updating...' : 'Update Game'}
+//                 </button>
 //                 <button 
 //                   type="button" 
 //                   className="cancel-btn" 
@@ -542,6 +568,7 @@
 //                     setOriginalGameData(null);
 //                     resetForm();
 //                   }}
+//                   disabled={isUpdating}
 //                 >
 //                   Cancel
 //                 </button>
@@ -565,83 +592,87 @@
 //             </tr>
 //           </thead>
 //           <tbody>
-//             {displayGames.map((game, index) => (
-//               <tr key={game._id || index}>
-//                 <td>
-//                   <div className="game-info">
-//                     <div className="game-avatar">{game.name.charAt(0)}</div>
-//                     <div className="game-details">
-//                       <div className="game-name">{game.name}</div>
-//                       <div className="game-type">
-//                         {getTypeIcon(game.type)}
-//                         <span>{game.type}</span>
+//             {displayGames.map((game, index) => {
+//               const gameType = game.type || game.gameType || 'regular';
+//               return (
+//                 <tr key={game._id || index}>
+//                   <td>
+//                     <div className="game-info">
+//                       <div className="game-avatar">{game.name.charAt(0)}</div>
+//                       <div className="game-details">
+//                         <div className="game-name">{game.name}</div>
+//                         <div className="game-type">
+//                           {getTypeIcon(gameType)}
+//                           <span>{gameType}</span>
+//                         </div>
 //                       </div>
 //                     </div>
-//                   </div>
-//                 </td>
-//                 <td>
-//                   <div className="time-info open-time">
-//                     <Clock className="time-icon" />
-//                     <span>{game.openTime}</span>
-//                   </div>
-//                 </td>
-//                 <td>
-//                   <div className="time-info close-time">
-//                     <Clock className="time-icon" />
-//                     <span>{game.closeTime}</span>
-//                   </div>
-//                 </td>
-//                 <td>
-//                   <div className="time-info result-time">
-//                     <Target className="time-icon" />
-//                     <span>{game.resultTime}</span>
-//                   </div>
-//                 </td>
-//                 <td>
-//                   <div className="rates-info">
-//                     <div className="rate-item">
-//                       <IndianRupee className="rate-icon" />
-//                       <span className="rate-label">Single:</span>
-//                       <span className="rate-value single">{game.singleDigit}</span>
+//                   </td>
+//                   <td>
+//                     <div className="time-info open-time">
+//                       <Clock className="time-icon" />
+//                       <span>{game.openTime}</span>
 //                     </div>
-//                     <div className="rate-item">
-//                       <IndianRupee className="rate-icon" />
-//                       <span className="rate-label">Jodi:</span>
-//                       <span className="rate-value jodi">{game.jodiDigit}</span>
+//                   </td>
+//                   <td>
+//                     <div className="time-info close-time">
+//                       <Clock className="time-icon" />
+//                       <span>{game.closeTime}</span>
 //                     </div>
-//                   </div>
-//                 </td>
-//                 <td>
-//                   <div className="status-info">
-//                     {getStatusIcon(game.status)}
-//                     <span className={`status-text ${game.status}`}>{game.status}</span>
-//                   </div>
-//                 </td>
-//                 <td>
-//                   <div className="actions">
-//                     <button
-//                       className="edit-btn"
-//                       onClick={() => handleEdit(game)}
-//                       title="Edit Game"
-//                     >
-//                       <Edit size={16} />
-//                     </button>
-//                     <button
-//                       className="delete-btn"
-//                       onClick={() => game._id && handleDelete(game._id)}
-//                       disabled={isDeleting === game._id}
-//                       title="Delete Game"
-//                     >
-//                       {isDeleting === game._id ? (
-//                         <div className="loading-spinner"></div>
-//                       ) : (
-//                         <Trash2 size={16} />
-//                       )}
-//                     </button>
-//                   </div>
-//                 </td>
-//               </tr>
-//             ))}
+//                   </td>
+//                   <td>
+//                     <div className="time-info result-time">
+//                       <Target className="time-icon" />
+//                       <span>{game.resultTime}</span>
+//                     </div>
+//                   </td>
+//                   <td>
+//                     <div className="rates-info">
+//                       <div className="rate-item">
+//                         <IndianRupee className="rate-icon" />
+//                         <span className="rate-label">Single:</span>
+//                         <span className="rate-value single">{game.singleDigit}</span>
+//                       </div>
+//                       <div className="rate-item">
+//                         <IndianRupee className="rate-icon" />
+//                         <span className="rate-label">Jodi:</span>
+//                         <span className="rate-value jodi">{game.jodiDigit}</span>
+//                       </div>
+//                     </div>
+//                   </td>
+//                   <td>
+//                     <div className="status-info">
+//                       {getStatusIcon(game.status)}
+//                       <span className={`status-text ${game.status}`}>{game.status}</span>
+//                     </div>
+//                   </td>
+//                   <td>
+//                     <div className="actions">
+//                       <button
+//                         className="edit-btn"
+//                         onClick={() => handleEdit(game)}
+//                         title="Edit Game"
+//                         disabled={isUpdating}
+//                       >
+//                         <Edit size={16} />
+//                       </button>
+//                       <button
+//                         className="delete-btn"
+//                         onClick={() => game._id && handleDelete(game._id)}
+//                         disabled={isDeleting === game._id || isUpdating}
+//                         title="Delete Game"
+//                       >
+//                         {isDeleting === game._id ? (
+//                           <div className="loading-spinner"></div>
+//                         ) : (
+//                           <Trash2 size={16} />
+//                         )}
+//                       </button>
+//                     </div>
+//                   </td>
+//                 </tr>
+//               );
+//             })}
 //           </tbody>
 //         </table>
 //       </div>
@@ -650,20 +681,20 @@
 // };
 
 // export default GamesTable;
-
 import axios from "axios";
 import { Clock, Edit, IndianRupee, Pause, Play, Plus, Target, Trash2, TrendingUp, Trophy, X } from "lucide-react";
 import React, { useState } from "react";
 import "./GamesTable.scss";
 
 interface Game {
-  _id?: string;
+  _id: string; // Made mandatory since we'll always have ID
   name: string;
   openTime: string;
   closeTime: string;
   resultTime: string;
   status: string;
   type: string;
+  gameType?: string;
   singleDigit: number;
   jodiDigit: number;
   openDateTime?: string;
@@ -684,6 +715,7 @@ const GamesTable: React.FC<GamesTableProps> = ({ games, onGameUpdated }) => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [isDeleting, setIsDeleting] = useState<string | null>(null);
+  const [isUpdating, setIsUpdating] = useState(false);
 
   const [formData, setFormData] = useState({
     name: '',
@@ -693,6 +725,8 @@ const GamesTable: React.FC<GamesTableProps> = ({ games, onGameUpdated }) => {
     resultDateTime: '',
     status: 'active'
   });
+
+  const API_BASE_URL = 'https://satashreejibackend.onrender.com';
 
   const resetForm = () => {
     setFormData({
@@ -726,7 +760,7 @@ const GamesTable: React.FC<GamesTableProps> = ({ games, onGameUpdated }) => {
 
     try {
       const adminToken = localStorage.getItem("adminToken");
-      const response = await fetch('https://satashreejibackend.onrender.com/api/admin/games', {
+      const response = await fetch(`${API_BASE_URL}/api/admin/games`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -755,13 +789,9 @@ const GamesTable: React.FC<GamesTableProps> = ({ games, onGameUpdated }) => {
   const formatDateTime = (dateStr: string | Date) => {
     if (!dateStr) return '';
     const date = new Date(dateStr);
-    if (isNaN(date.getTime())) {
-      console.warn("Invalid date string:", dateStr);
-      return '';
-    }
+    if (isNaN(date.getTime())) return '';
     return date.toISOString().slice(0, 16);
   };
-  
 
   const handleEdit = (game: Game) => {
     setEditingGame(game);
@@ -769,7 +799,7 @@ const GamesTable: React.FC<GamesTableProps> = ({ games, onGameUpdated }) => {
     
     setFormData({
       name: game.name || '',
-      type: game.type || 'regular',
+      type: game.type || game.gameType || 'regular',
       openDateTime: game.openDateTime 
         ? formatDateTime(game.openDateTime) 
         : game.openTime 
@@ -792,51 +822,62 @@ const GamesTable: React.FC<GamesTableProps> = ({ games, onGameUpdated }) => {
 
   const handleEditSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-  
+    setIsUpdating(true);
+    setErrorMessage(null);
+
+    if (!editingGame) return;
+
     const form = e.target as HTMLFormElement;
     const formData = new FormData(form);
-  
+
     const updateData: any = {
       name: formData.get("name"),
-      type: formData.get("type"),
+      gameType: formData.get("type"),
       status: formData.get("status"),
     };
-  
+
     const openDateTime = formData.get("openDateTime");
     const closeDateTime = formData.get("closeDateTime");
     const resultDateTime = formData.get("resultDateTime");
-  
+
     if (typeof openDateTime === "string" && openDateTime) {
-      updateData.openTime = new Date(openDateTime).toISOString();
+      updateData.openDateTime = new Date(openDateTime).toISOString();
     }
     if (typeof closeDateTime === "string" && closeDateTime) {
-      updateData.closeTime = new Date(closeDateTime).toISOString();
+      updateData.closeDateTime = new Date(closeDateTime).toISOString();
     }
     if (typeof resultDateTime === "string" && resultDateTime) {
-      updateData.resultTime = new Date(resultDateTime).toISOString();
+      updateData.resultDateTime = new Date(resultDateTime).toISOString();
     }
-  
-    console.log("Update Data", updateData);
-  
+
     try {
+      const adminToken = localStorage.getItem("adminToken");
+      
       const response = await axios.put(
-`http://localhost:9000/api/admin/games/${editingGame?._id}`,
-        updateData
+        `${API_BASE_URL}/api/admin/games/${editingGame._id}`,
+        updateData,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${adminToken}`,
+          }
+        }
       );
-  
-      console.log("Game updated successfully", response.data);
-  
+      
+      setSuccessMessage('Game updated successfully!');
       setShowEditForm(false);
       setEditingGame(null);
       setOriginalGameData(null);
       resetForm();
       onGameUpdated?.();
       
-    } catch (error) {
-      console.error("Error updating game:", error);
+    } catch (error: any) {
+      const errorMsg = error.response?.data?.message || error.message || 'Failed to update game';
+      setErrorMessage(errorMsg);
+    } finally {
+      setIsUpdating(false);
     }
   };
-  
 
   const handleDelete = async (gameId: string) => {
     if (!window.confirm('Are you sure you want to delete this game? This action cannot be undone.')) {
@@ -847,7 +888,7 @@ const GamesTable: React.FC<GamesTableProps> = ({ games, onGameUpdated }) => {
 
     try {
       const adminToken = localStorage.getItem("adminToken");
-      const response = await fetch(`http://localhost:9000/api/admin/games/${gameId}`, {
+      const response = await fetch(`${API_BASE_URL}/api/admin/games/${gameId}`, {
         method: 'DELETE',
         headers: {
           Authorization: `Bearer ${adminToken}`,
@@ -874,12 +915,19 @@ const GamesTable: React.FC<GamesTableProps> = ({ games, onGameUpdated }) => {
   const isFieldModified = (fieldName: keyof typeof formData) => {
     if (!originalGameData) return false;
     
-    const originalValue = originalGameData[fieldName as keyof Game];
-    const currentValue = formData[fieldName];
+    let originalValue: any;
+    let currentValue = formData[fieldName];
     
-    // For datetime fields, we need to format the original value for comparison
-    if (fieldName.includes('DateTime') && originalValue) {
-      return formatDateTime(originalValue as string) !== currentValue;
+    // Handle type field mapping
+    if (fieldName === 'type') {
+      originalValue = originalGameData.type || originalGameData.gameType;
+    } else if (fieldName.includes('DateTime')) {
+      const originalField = originalGameData[fieldName as keyof Game] as string;
+      if (originalField) {
+        originalValue = formatDateTime(originalField);
+      }
+    } else {
+      originalValue = originalGameData[fieldName as keyof Game];
     }
     
     return originalValue !== currentValue;
@@ -898,22 +946,6 @@ const GamesTable: React.FC<GamesTableProps> = ({ games, onGameUpdated }) => {
     ) : (
       <Trophy className="type-icon premium" />
     );
-
-  // Sample data for demonstration
-  const sampleGames: Game[] = [
-    {
-      name: "Mumbai Morning",
-      openTime: "09:00 AM",
-      closeTime: "11:00 AM",
-      resultTime: "11:30 AM",
-      status: "active",
-      type: "regular",
-      singleDigit: 95,
-      jodiDigit: 950
-    },
-  ];
-
-  const displayGames = games.length > 0 ? games : sampleGames;
 
   return (
     <div className="games-table">
@@ -1085,7 +1117,7 @@ const GamesTable: React.FC<GamesTableProps> = ({ games, onGameUpdated }) => {
                 </div>
                 <div className="original-item">
                   <span className="label">Type:</span>
-                  <span className="value">{originalGameData.type}</span>
+                  <span className="value">{originalGameData.type || originalGameData.gameType}</span>
                 </div>
                 <div className="original-item">
                   <span className="label">Status:</span>
@@ -1110,6 +1142,7 @@ const GamesTable: React.FC<GamesTableProps> = ({ games, onGameUpdated }) => {
                   value={formData.name}
                   onChange={handleChange}
                   className={isFieldModified('name') ? 'modified-field' : ''}
+                  required
                 />
               </div>
 
@@ -1178,7 +1211,13 @@ const GamesTable: React.FC<GamesTableProps> = ({ games, onGameUpdated }) => {
               </div>
 
               <div className="form-actions">
-                <button type="submit" className="submit-btn">Update Game</button>
+                <button 
+                  type="submit" 
+                  className="submit-btn"
+                  disabled={isUpdating}
+                >
+                  {isUpdating ? 'Updating...' : 'Update Game'}
+                </button>
                 <button 
                   type="button" 
                   className="cancel-btn" 
@@ -1188,6 +1227,7 @@ const GamesTable: React.FC<GamesTableProps> = ({ games, onGameUpdated }) => {
                     setOriginalGameData(null);
                     resetForm();
                   }}
+                  disabled={isUpdating}
                 >
                   Cancel
                 </button>
@@ -1211,83 +1251,87 @@ const GamesTable: React.FC<GamesTableProps> = ({ games, onGameUpdated }) => {
             </tr>
           </thead>
           <tbody>
-            {displayGames.map((game, index) => (
-              <tr key={game._id || index}>
-                <td>
-                  <div className="game-info">
-                    <div className="game-avatar">{game.name.charAt(0)}</div>
-                    <div className="game-details">
-                      <div className="game-name">{game.name}</div>
-                      <div className="game-type">
-                        {getTypeIcon(game.type)}
-                        <span>{game.type}</span>
+            {games.map((game) => {
+              const gameType = game.type || game.gameType || 'regular';
+              return (
+                <tr key={game._id}>
+                  <td>
+                    <div className="game-info">
+                      <div className="game-avatar">{game.name.charAt(0)}</div>
+                      <div className="game-details">
+                        <div className="game-name">{game.name}</div>
+                        <div className="game-type">
+                          {getTypeIcon(gameType)}
+                          <span>{gameType}</span>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </td>
-                <td>
-                  <div className="time-info open-time">
-                    <Clock className="time-icon" />
-                    <span>{game.openTime}</span>
-                  </div>
-                </td>
-                <td>
-                  <div className="time-info close-time">
-                    <Clock className="time-icon" />
-                    <span>{game.closeTime}</span>
-                  </div>
-                </td>
-                <td>
-                  <div className="time-info result-time">
-                    <Target className="time-icon" />
-                    <span>{game.resultTime}</span>
-                  </div>
-                </td>
-                <td>
-                  <div className="rates-info">
-                    <div className="rate-item">
-                      <IndianRupee className="rate-icon" />
-                      <span className="rate-label">Single:</span>
-                      <span className="rate-value single">{game.singleDigit}</span>
+                  </td>
+                  <td>
+                    <div className="time-info open-time">
+                      <Clock className="time-icon" />
+                      <span>{game.openTime}</span>
                     </div>
-                    <div className="rate-item">
-                      <IndianRupee className="rate-icon" />
-                      <span className="rate-label">Jodi:</span>
-                      <span className="rate-value jodi">{game.jodiDigit}</span>
+                  </td>
+                  <td>
+                    <div className="time-info close-time">
+                      <Clock className="time-icon" />
+                      <span>{game.closeTime}</span>
                     </div>
-                  </div>
-                </td>
-                <td>
-                  <div className="status-info">
-                    {getStatusIcon(game.status)}
-                    <span className={`status-text ${game.status}`}>{game.status}</span>
-                  </div>
-                </td>
-                <td>
-                  <div className="actions">
-                    <button
-                      className="edit-btn"
-                      onClick={() => handleEdit(game)}
-                      title="Edit Game"
-                    >
-                      <Edit size={16} />
-                    </button>
-                    <button
-                      className="delete-btn"
-                      onClick={() => game._id && handleDelete(game._id)}
-                      disabled={isDeleting === game._id}
-                      title="Delete Game"
-                    >
-                      {isDeleting === game._id ? (
-                        <div className="loading-spinner"></div>
-                      ) : (
-                        <Trash2 size={16} />
-                      )}
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            ))}
+                  </td>
+                  <td>
+                    <div className="time-info result-time">
+                      <Target className="time-icon" />
+                      <span>{game.resultTime}</span>
+                    </div>
+                  </td>
+                  <td>
+                    <div className="rates-info">
+                      <div className="rate-item">
+                        <IndianRupee className="rate-icon" />
+                        <span className="rate-label">Single:</span>
+                        <span className="rate-value single">{game.singleDigit}</span>
+                      </div>
+                      <div className="rate-item">
+                        <IndianRupee className="rate-icon" />
+                        <span className="rate-label">Jodi:</span>
+                        <span className="rate-value jodi">{game.jodiDigit}</span>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <div className="status-info">
+                      {getStatusIcon(game.status)}
+                      <span className={`status-text ${game.status}`}>{game.status}</span>
+                    </div>
+                  </td>
+                  <td>
+                    <div className="actions">
+                      <button
+                        className="edit-btn"
+                        onClick={() => handleEdit(game)}
+                        title="Edit Game"
+                        disabled={isUpdating}
+                      >
+                        <Edit size={16} />
+                      </button>
+                      <button
+                        className="delete-btn"
+                        onClick={() => handleDelete(game._id)}
+                        disabled={isDeleting === game._id || isUpdating}
+                        title="Delete Game"
+                      >
+                        {isDeleting === game._id ? (
+                          <div className="loading-spinner"></div>
+                        ) : (
+                          <Trash2 size={16} />
+                        )}
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>
