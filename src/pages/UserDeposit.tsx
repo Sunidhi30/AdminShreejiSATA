@@ -253,19 +253,20 @@ const UserDeposit: React.FC = () => {
           <tbody>
             {filteredTransactions.map((transaction) => (
               <tr key={transaction._id}>
-                <td className="user-cell">
-                  <div className="user-info">
-                    <img 
-                      src={transaction.user.profileImage || '/default-avatar.png'} 
-                      alt={transaction.user.username}
-                      className="user-avatar"
-                    />
-                    <div className="user-details">
-                      <span className="username">{transaction.user.username}</span>
-                      <span className="email">{transaction.user.email}</span>
-                    </div>
-                  </div>
-                </td>
+             <td className="user-cell">
+  <div className="user-info">
+    <img 
+      src={transaction.user?.profileImage || '/default-avatar.png'} 
+      alt={transaction.user?.username || 'Unknown User'}
+      className="user-avatar"
+    />
+    <div className="user-details">
+      <span className="username">{transaction.user?.username || 'Unknown'}</span>
+      <span className="email">{transaction.user?.email || 'No Email'}</span>
+    </div>
+  </div>
+</td>
+
                 <td className="amount-cell">
                   {formatAmount(transaction.amount)}
                 </td>

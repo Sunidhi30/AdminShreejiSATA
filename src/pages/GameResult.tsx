@@ -577,7 +577,7 @@ const GameResult: React.FC = () => {
         ...(formData.spinnerResult && { spinnerResult: parseInt(formData.spinnerResult) })
       };
 
-      const response = await fetch(`${API_BASE_URL}/testing-games/${formData.gameId}/results`, {
+      const response = await fetch(`${API_BASE_URL}/games/${formData.gameId}/results`, {
         method: 'POST',
         headers: getAuthHeaders(),
         body: JSON.stringify(payload)
