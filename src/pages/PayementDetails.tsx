@@ -77,7 +77,7 @@ const AdminPaymentSettings: React.FC = () => {
 
   const fetchSettings = async () => {
     try {
-      const response = await fetch('http://localhost:9000/api/admin/admin-settings/settings', {
+      const response = await fetch('https://satashreejibackend.onrender.com/api/admin/admin-settings/settings', {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('adminToken')}`,
           'Content-Type': 'application/json',
@@ -130,7 +130,7 @@ const AdminPaymentSettings: React.FC = () => {
       if (files.paytmQr) formData.append('paytmQr', files.paytmQr);
       if (files.gpayQr) formData.append('gpayQr', files.gpayQr);
 
-      const response = await fetch('http://localhost:9000/api/admin/admin-settings/settings/payment-details', {
+      const response = await fetch('https://satashreejibackend.onrender.com/api/admin/admin-settings/settings/payment-details', {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('adminToken')}`,
