@@ -1,4 +1,5 @@
 
+
 import React, { useEffect, useState } from 'react';
 import './Withdraw.scss';
 
@@ -20,6 +21,11 @@ interface User {
   };
 }
 
+interface PaymentScreenshot {
+  url: string;
+  uploadedAt: string;
+}
+
 interface Withdrawal {
   _id: string;
   user: User;
@@ -29,6 +35,7 @@ interface Withdrawal {
   paymentMethod: string;
   description: string;
   paymentDetails: PaymentDetails;
+  paymentScreenshot?: PaymentScreenshot;
   createdAt: string;
   updatedAt: string;
 }
@@ -46,24 +53,24 @@ const WithdrawUser: React.FC = () => {
   const [selectedWithdrawal, setSelectedWithdrawal] = useState<Withdrawal | null>(null);
   const [rejectionReason, setRejectionReason] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
-  const [filterStatus, setFilterStatus] = useState<string>(''); // 🔥 Filter state
-  const [showApproveModal, setShowApproveModal] = useState(false); // 🔥 Approval Modal
-  const [approveWithdrawalId, setApproveWithdrawalId] = useState<string | null>(null); // 🔥 Which withdrawal to approve
+  const [filterStatus, setFilterStatus] = useState<string>('');
+  const [showApproveModal, setShowApproveModal] = useState(false);
+  const [approveWithdrawalId, setApproveWithdrawalId] = useState<string | null>(null);
+  const [showImageModal, setShowImageModal] = useState(false);
+  const [currentImage, setCurrentImage] = useState('');
   const itemsPerPage = 10;
 
   useEffect(() => {
     fetchWithdrawals();
-  }, [filterStatus]); // Refetch when filter changes
+  }, [filterStatus]);
 
   const fetchWithdrawals = async () => {
     try {
       setLoading(true);
-
-
-    let url = 'https://satashreejibackend.onrender.com/api/admin/users-withdrawals-testing';
+      let url = 'https://satashreejibackend.onrender.com/api/admin/users-withdrawals-testing';
 
       if (filterStatus) {
-        url += `?status=${filterStatus}`; // 🔥 Apply filter
+        url += `?status=${filterStatus}`;
       }
 
       const response = await fetch(url, {
@@ -104,7 +111,7 @@ const WithdrawUser: React.FC = () => {
       }
 
       alert('Withdrawal approved successfully!');
-      fetchWithdrawals(); // Refresh the list
+      fetchWithdrawals();
     } catch (error) {
       console.error('Error approving withdrawal:', error);
       alert(error instanceof Error ? error.message : 'Unexpected error during approval.');
@@ -139,7 +146,7 @@ const WithdrawUser: React.FC = () => {
       setShowRejectModal(false);
       setSelectedWithdrawal(null);
       setRejectionReason('');
-      fetchWithdrawals(); // Refresh the list
+      fetchWithdrawals();
     } catch (error) {
       console.error('Error rejecting withdrawal:', error);
       alert(error instanceof Error ? error.message : 'Unexpected error during rejection.');
@@ -169,6 +176,16 @@ const WithdrawUser: React.FC = () => {
     setRejectionReason('');
   };
 
+  const openImageModal = (imageUrl: string) => {
+    setCurrentImage(imageUrl);
+    setShowImageModal(true);
+  };
+
+  const closeImageModal = () => {
+    setShowImageModal(false);
+    setCurrentImage('');
+  };
+
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleString('en-IN', {
       year: 'numeric',
@@ -186,7 +203,6 @@ const WithdrawUser: React.FC = () => {
     }).format(amount);
   };
 
-  // Pagination logic
   const totalPages = Math.ceil(withdrawals.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
@@ -195,241 +211,263 @@ const WithdrawUser: React.FC = () => {
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
   };
-return (
-  <div className="game-result-container">
-    <div className="game-result-header">
-      <h1>Withdrawal Management</h1>
-      <div className="actions">
-        {/* 🔥 Filter Dropdown */}
-        <select
-          value={filterStatus}
-          onChange={(e) => setFilterStatus(e.target.value)}
-          className="filter-dropdown"
-        >
-          <option value="">All Statuses</option>
-          <option value="pending">Pending</option>
-          <option value="admin_pending">Admin Pending</option>
-          <option value="completed">Completed</option>
-          <option value="failed">Failed</option>
-          <option value="cancelled">Cancelled</option>
-          <option value="rejected">Rejected</option>
-        </select>
+
+  return (
+    <div className="game-result-container">
+      <div className="game-result-header">
+        <h1>Withdrawal Management</h1>
+        <div className="actions">
+          <select
+            value={filterStatus}
+            onChange={(e) => setFilterStatus(e.target.value)}
+            className="filter-dropdown"
+          >
+            <option value="">All Statuses</option>
+            <option value="pending">Pending</option>
+            <option value="admin_pending">Admin Pending</option>
+            <option value="completed">Completed</option>
+            <option value="failed">Failed</option>
+            <option value="cancelled">Cancelled</option>
+            <option value="rejected">Rejected</option>
+          </select>
+        </div>
       </div>
-    </div>
 
-    {loading ? (
-      <div className="loading">Loading withdrawal requests...</div>
-    ) : (
-      <>
-        {/* Table */}
-        <div className="results-table">
-          <div className="table-wrapper">
-            <table>
-              <thead>
-                <tr>
-                  <th>User Details</th>
-                  <th>Amount</th>
-                  <th>Payment Method</th>
-                  <th>Payment Details</th>
-                  <th>Wallet Balance</th>
-                  <th>Request Date</th>
-                  <th>Status</th> {/* 👈 Added Status column */}
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {currentWithdrawals.length === 0 ? (
+      {loading ? (
+        <div className="loading">Loading withdrawal requests...</div>
+      ) : (
+        <>
+          <div className="results-table">
+            <div className="table-wrapper">
+              <table>
+                <thead>
                   <tr>
-                    <td colSpan={8} className="no-results">
-                      No withdrawal requests found
-                    </td>
+                    <th>User Details</th>
+                    <th>Amount</th>
+                    <th>Payment Method</th>
+                    <th>Payment Details</th>
+                    <th>Wallet Balance</th>
+                    <th>Request Date</th>
+                    <th>Screenshot</th>
+                    <th>Status</th>
+                    <th>Actions</th>
                   </tr>
-                ) : (
-                  currentWithdrawals.map((withdrawal) => (
-                    <tr key={withdrawal._id}>
-                      <td>
-                        <div className="user-details">
-                          <div className="username">{withdrawal.user.username}</div>
-                          <div className="email">{withdrawal.user.email}</div>
-                          <div className="user-id">ID: {withdrawal.user._id}</div>
-                        </div>
-                      </td>
-                      <td className="result-digit">
-                        {formatCurrency(withdrawal.amount)}
-                      </td>
-                      <td>
-                        <span className="payment-method">
-                          {withdrawal.paymentMethod.toUpperCase()}
-                        </span>
-                      </td>
-                      <td>
-                        <div className="payment-details">
-                        <div>Mobile: {withdrawal.paymentDetails?.mobileNumber || 'N/A'}</div>
-
-                        <div>UPI ID: {withdrawal.paymentDetails?.upiId || 'N/A'}</div>
-                        </div>
-                      </td>
-                      <td>
-                        <div className="wallet-info">
-                        <div>Balance: {formatCurrency(withdrawal.user.wallet?.balance || 0)}</div>
-<div className="wallet-stats">
-  <small>
-    Deposits: {formatCurrency(withdrawal.user.wallet?.totalDeposits || 0)} | 
-    Withdrawals: {formatCurrency(withdrawal.user.wallet?.totalWithdrawals || 0)}
-  </small>
-</div>
-
-                        </div>
-                      </td>
-                      <td>{formatDate(withdrawal.createdAt)}</td>
-                      <td>
-                        {/* 👇 Colored badge for status */}
-                        <span
-                          className={`status-badge ${withdrawal.status}`}
-                        >
-                          {withdrawal.status.toUpperCase()}
-                        </span>
-                      </td>
-                      <td>
-                        <div className="action-buttons">
-                          <button
-                            className="approve-btn"
-                            onClick={() => openApproveModal(withdrawal._id)}
-                            disabled={processingId === withdrawal._id}
-                          >
-                            {processingId === withdrawal._id ? 'Processing...' : 'Approve'}
-                          </button>
-                          <button
-                            className="reject-btn"
-                            onClick={() => openRejectModal(withdrawal)}
-                            disabled={processingId === withdrawal._id}
-                          >
-                            Reject
-                          </button>
-                        </div>
+                </thead>
+                <tbody>
+                  {currentWithdrawals.length === 0 ? (
+                    <tr>
+                      <td colSpan={9} className="no-results">
+                        No withdrawal requests found
                       </td>
                     </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
+                  ) : (
+                    currentWithdrawals.map((withdrawal) => (
+                      <tr key={withdrawal._id}>
+                        <td>
+                          <div className="user-details">
+                            <div className="username">{withdrawal.user?.username || 'N/A'}</div>
+                            <div className="email">{withdrawal.user?.email || 'N/A'}</div>
+                            <div className="user-id">ID: {withdrawal.user?._id || 'N/A'}</div>
+                          </div>
+                        </td>
+                        <td className="result-digit">
+                          {formatCurrency(withdrawal.amount)}
+                        </td>
+                        <td>
+                          <span className="payment-method">
+                            {withdrawal.paymentMethod.toUpperCase()}
+                          </span>
+                        </td>
+                        <td>
+                          <div className="payment-details">
+                            <div>Mobile: {withdrawal.paymentDetails?.mobileNumber || 'N/A'}</div>
+                            <div>UPI ID: {withdrawal.paymentDetails?.upiId || 'N/A'}</div>
+                          </div>
+                        </td>
+                        <td>
+                          <div className="wallet-info">
+                            <div>Balance: {formatCurrency(withdrawal.user.wallet?.balance || 0)}</div>
+                            <div className="wallet-stats">
+                              <small>
+                                Deposits: {formatCurrency(withdrawal.user.wallet?.totalDeposits || 0)} | 
+                                Withdrawals: {formatCurrency(withdrawal.user.wallet?.totalWithdrawals || 0)}
+                              </small>
+                            </div>
+                          </div>
+                        </td>
+                        <td>{formatDate(withdrawal.createdAt)}</td>
+                        <td className="screenshot-cell">
+                          {withdrawal.paymentScreenshot ? (
+                            <button 
+                            onClick={() => openImageModal(withdrawal.paymentScreenshot?.url || 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTJRS-4chjWMRAmrtz7ivK53K_uygrgjzw9Uw&s')}
+                            className="view-screenshot-btn"
+                            >
+                              View Screenshot
+                            </button>
+                          ) : (
+                            'N/A'
+                          )}
+                        </td>
+                        <td>
+                          <span className={`status-badge ${withdrawal.status}`}>
+                            {withdrawal.status.toUpperCase()}
+                          </span>
+                        </td>
+                        <td>
+                          <div className="action-buttons">
+                            <button
+                              className="approve-btn"
+                              onClick={() => openApproveModal(withdrawal._id)}
+                              disabled={processingId === withdrawal._id}
+                            >
+                              {processingId === withdrawal._id ? 'Processing...' : 'Approve'}
+                            </button>
+                            <button
+                              className="reject-btn"
+                              onClick={() => openRejectModal(withdrawal)}
+                              disabled={processingId === withdrawal._id}
+                            >
+                              Reject
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))
+                  )}
+                </tbody>
+              </table>
+            </div>
           </div>
-        </div>
 
-        {/* Pagination */}
-        {totalPages > 1 && (
-          <div className="pagination">
-            <button
-              onClick={() => handlePageChange(currentPage - 1)}
-              disabled={currentPage === 1}
-            >
-              Previous
-            </button>
-            {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+          {totalPages > 1 && (
+            <div className="pagination">
               <button
-                key={page}
-                onClick={() => handlePageChange(page)}
-                className={currentPage === page ? 'active' : ''}
+                onClick={() => handlePageChange(currentPage - 1)}
+                disabled={currentPage === 1}
               >
-                {page}
+                Previous
               </button>
-            ))}
-            <button
-              onClick={() => handlePageChange(currentPage + 1)}
-              disabled={currentPage === totalPages}
-            >
-              Next
-            </button>
-          </div>
-        )}
-      </>
-    )}
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                <button
+                  key={page}
+                  onClick={() => handlePageChange(page)}
+                  className={currentPage === page ? 'active' : ''}
+                >
+                  {page}
+                </button>
+              ))}
+              <button
+                onClick={() => handlePageChange(currentPage + 1)}
+                disabled={currentPage === totalPages}
+              >
+                Next
+              </button>
+            </div>
+          )}
+        </>
+      )}
 
-    {/* Approve Modal */}
-    {showApproveModal && (
-      <div className="modal-overlay">
-        <div className="modal-content">
-          <div className="modal-header">
-            <h2>Approve Withdrawal</h2>
-            <button className="close-btn" onClick={closeApproveModal}>×</button>
-          </div>
-          <div className="modal-body">
-            Are you sure you want to approve this withdrawal?
-          </div>
-          <div className="modal-actions">
-            <button className="cancel-btn" onClick={closeApproveModal}>
-              Cancel
-            </button>
-            <button
-              className="submit-btn"
-              onClick={() => {
-                if (approveWithdrawalId) handleApprove(approveWithdrawalId);
-                closeApproveModal();
-              }}
-            >
-              Confirm
-            </button>
-          </div>
-        </div>
-      </div>
-    )}
-
-    {/* Reject Modal */}
-    {showRejectModal && (
-      <div className="modal-overlay">
-        <div className="modal-content">
-          <div className="modal-header">
-            <h2>Reject Withdrawal Request</h2>
-            <button className="close-btn" onClick={closeRejectModal}>×</button>
-          </div>
-          <div className="declare-form">
-            <div className="form-group">
-              <label>User:</label>
-              <input
-                type="text"
-                value={`${selectedWithdrawal?.user.username} (${selectedWithdrawal?.user.email})`}
-                disabled
-              />
+      {showApproveModal && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h2>Approve Withdrawal</h2>
+              <button className="close-btn" onClick={closeApproveModal}>×</button>
             </div>
-            <div className="form-group">
-              <label>Amount:</label>
-              <input
-                type="text"
-                value={selectedWithdrawal ? formatCurrency(selectedWithdrawal.amount) : ''}
-                disabled
-              />
+            <div className="modal-body">
+              Are you sure you want to approve this withdrawal?
             </div>
-            <div className="form-group">
-              <label>
-                Reason for Rejection: <span style={{ color: 'red' }}>*</span>
-              </label>
-              <textarea
-                value={rejectionReason}
-                onChange={(e) => setRejectionReason(e.target.value)}
-                placeholder="Please provide a reason for rejecting this withdrawal request..."
-                rows={4}
-              />
-            </div>
-            <div className="form-actions">
-              <button className="cancel-btn" onClick={closeRejectModal}>
+            <div className="modal-actions">
+              <button className="cancel-btn" onClick={closeApproveModal}>
                 Cancel
               </button>
               <button
-                className="submit-btn reject-confirm"
-                onClick={handleReject}
-                disabled={!rejectionReason.trim() || processingId === selectedWithdrawal?._id}
+                className="submit-btn"
+                onClick={() => {
+                  if (approveWithdrawalId) handleApprove(approveWithdrawalId);
+                  closeApproveModal();
+                }}
               >
-                {processingId === selectedWithdrawal?._id ? 'Processing...' : 'Confirm Rejection'}
+                Confirm
               </button>
             </div>
           </div>
         </div>
-      </div>
-    )}
-  </div>
-);
+      )}
 
+      {showRejectModal && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h2>Reject Withdrawal Request</h2>
+              <button className="close-btn" onClick={closeRejectModal}>×</button>
+            </div>
+            <div className="declare-form">
+              <div className="form-group">
+                <label>User:</label>
+                <input
+                  type="text"
+                  value={`${selectedWithdrawal?.user?.username || 'N/A'} (${selectedWithdrawal?.user?.email || 'N/A'})`}
+                  disabled
+                />
+              </div>
+              <div className="form-group">
+                <label>Amount:</label>
+                <input
+                  type="text"
+                  value={selectedWithdrawal ? formatCurrency(selectedWithdrawal.amount) : ''}
+                  disabled
+                />
+              </div>
+              <div className="form-group">
+                <label>
+                  Reason for Rejection: <span style={{ color: 'red' }}>*</span>
+                </label>
+                <textarea
+                  value={rejectionReason}
+                  onChange={(e) => setRejectionReason(e.target.value)}
+                  placeholder="Please provide a reason for rejecting this withdrawal request..."
+                  rows={4}
+                />
+              </div>
+              <div className="form-actions">
+                <button className="cancel-btn" onClick={closeRejectModal}>
+                  Cancel
+                </button>
+                <button
+                  className="submit-btn reject-confirm"
+                  onClick={handleReject}
+                  disabled={!rejectionReason.trim() || processingId === selectedWithdrawal?._id}
+                >
+                  {processingId === selectedWithdrawal?._id ? 'Processing...' : 'Confirm Rejection'}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
+      {showImageModal && (
+        <div className="image-modal-overlay" onClick={closeImageModal}>
+          <div className="image-modal-content" onClick={e => e.stopPropagation()}>
+            <button className="close-image-btn" onClick={closeImageModal}>×</button>
+            <img 
+              src={currentImage} 
+              alt="Payment Screenshot" 
+              className="payment-screenshot" 
+              onError={(e) => {
+                const target = e.target as HTMLImageElement;
+                target.src = '/image-placeholder.png';
+              }}
+            />
+            <div className="screenshot-meta">
+              Uploaded: {formatDate(new Date().toISOString())}
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
 };
 
 export default WithdrawUser;
