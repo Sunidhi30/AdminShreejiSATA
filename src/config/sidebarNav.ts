@@ -103,6 +103,12 @@ const sidebarNav = [
     icon: "bi:chat-dots",
     text: "Discount",
   },
+  {
+    link: "/Admin-details",
+    section: "Billing-Details",
+    icon: "ph:currency-circle-dollar-bold",
+    text: "Customers",
+  },
 
   {
     link: "/admin-profile",
